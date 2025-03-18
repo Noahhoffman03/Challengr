@@ -1,6 +1,8 @@
 package com.example.maptesting
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -20,6 +22,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        val createChallengeButton: Button = findViewById(R.id.create_challenge)
+        createChallengeButton.setOnClickListener {
+            val intent = Intent(this, ChallengeActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 
