@@ -32,6 +32,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ChallengeActivity"/>
+
         <!--Contains the API key for the map to work. NEEDED, DO NOT MESS WITH -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
