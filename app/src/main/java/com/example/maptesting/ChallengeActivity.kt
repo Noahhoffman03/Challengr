@@ -1,9 +1,5 @@
 package com.example.maptesting
 
-<<<<<<< Updated upstream
-class ChallengeActivity {
-}
-=======
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -181,4 +177,3 @@ class ChallengeActivity : AppCompatActivity() {
         }
     }
 }
->>>>>>> Stashed changes
