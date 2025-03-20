@@ -43,6 +43,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this, ChallengeActivity::class.java)
             startActivity(intent)
         }
+
+        val toChallList: Button = findViewById(R.id.create_challenge)
+        toChallList.setOnClickListener {
+            val intent = Intent(this, ChallList::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
