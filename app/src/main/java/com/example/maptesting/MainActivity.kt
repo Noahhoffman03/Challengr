@@ -42,7 +42,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Add a pin on click (update for providing info/changing screens when clicked on
         mMap.setOnMapClickListener { latLng ->
-            mMap.addMarker(MarkerOptions().position(latLng).title("Pinned Location"))
+            val marker = mMap.addMarker(MarkerOptions().position(latLng).title("Pinned Location"))
+            mMap.setOnMarkerClickListener { clickedMarker ->
+                if (clickedMarker == marker) {
+                    val intent = Intent(this, ChallengeActivity::class.java)
+                    startActivity(intent)
+                }
+                true
+
+            }
         }
     }
 }

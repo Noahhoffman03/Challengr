@@ -33,6 +33,7 @@
         </activity>
 
 
+
         <activity android:name=".ChallengeActivity"/>
         <activity android:name=".PhotoActivity"/>
 
