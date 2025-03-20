@@ -20,7 +20,7 @@ data class Challenge(
     val title: String,
     val image: Uri?,
     val description: String,
-    val latitude: Double,  //added stuff for coordinates
+    val latitude: Double,  //stuff for coordinates
     val longitude: Double
 )
 

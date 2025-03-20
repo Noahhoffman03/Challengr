@@ -5,8 +5,8 @@ package com.example.maptesting
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.widget.Button
@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -26,8 +27,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    //The default location (gac) if user denies location access for some reason
-    private val defaultLocation = LatLng(44.3238, -93.9758)
+    private val defaultLocation = LatLng(44.3238, -93.9758) // Default location (GAC)
+    private var redPinMarker: Marker? = null // Tracks the new challenge pin (red one)
+
+    // Hardcoded challenges for testing map loading
+    // REMOVE LATER --------------------------------------------
+    var challenges = mutableListOf(
+        Challenge("Challenge 1", null, "First test challenge", 44.32295, -93.97234),
+        Challenge("Challenge 2", null, "Second test challenge", 44.32407, -93.97552)
+    )
+    //---------------------------
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +45,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        //Fragment for map
-        // (From the source page, not super sure of how this works)
+        // Fragment for map
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -49,6 +57,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+
+    //Originally from stackOverflow tutorial
+    //All the stuff that the map works with
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -59,29 +70,74 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.isMyLocationEnabled = true
             getLastKnownLocation()
         } else {
-            //This is the ask for location permission
+            // Ask for location permission
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
         }
 
-        // Add markers on clicking on the map
-        mMap.setOnMapClickListener { latLng ->
-            val marker = mMap.addMarker(MarkerOptions().position(latLng).title("Pinned Location"))
+        // Load existing challenges as blue pins
+        loadExistingChallenges()
 
-            mMap.setOnMarkerClickListener { clickedMarker ->
-                if (clickedMarker == marker) {
-                    // Pass latitude and longitude to ChallengeActivity
-                    val intent = Intent(this, ChallengeActivity::class.java).apply {
-                        putExtra("LATITUDE", latLng.latitude)
-                        putExtra("LONGITUDE", latLng.longitude)
-                    }
-                    startActivity(intent)
-                }
+        // Handle user clicks to place a  pin
+        mMap.setOnMapClickListener { latLng ->
+            placeSingleRedPin(latLng)
+        }
+
+        // Click the pin opens new challenge page
+        mMap.setOnMarkerClickListener { marker ->
+            if (marker == redPinMarker) {
+                startChallengeActivity(marker.position)
                 true
+            } else {
+                false
             }
         }
     }
 
-    // Get last known location and move camera when the app is open
+
+
+    // This loads all the current challenges
+    private fun loadExistingChallenges() {
+        for (challenge in challenges) {
+            val location = LatLng(challenge.latitude, challenge.longitude)
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(location)
+                    .title(challenge.title)
+                    .snippet(challenge.description)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)) // Makes the pin blue
+            )
+        }
+    }
+
+
+
+    // Function to place pin for new challenge (in red)
+    // Updated to only place one at a time
+    private fun placeSingleRedPin(latLng: LatLng) {
+        // Remove the current  pin if it exists
+        redPinMarker?.remove()
+
+        // Add new red pin
+        redPinMarker = mMap.addMarker(
+            MarkerOptions()
+                .position(latLng)
+                .title("New Challenge Location")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)) //Literally just make the pin red
+        )
+    }
+
+
+    // Start the ChallengeActivity for a new challenge
+    // with the red pin's location brought over for the coords
+    private fun startChallengeActivity(location: LatLng) {
+        val intent = Intent(this, ChallengeActivity::class.java)
+        intent.putExtra("LATITUDE", location.latitude)
+        intent.putExtra("LONGITUDE", location.longitude)
+        startActivity(intent)
+    }
+
+
+    // Get last known location and move camera when the app is opened
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
@@ -91,12 +147,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             } else {
                 moveToDefaultLocation()
             }
+            //If location is denied go to default
         }.addOnFailureListener {
             moveToDefaultLocation()
         }
     }
 
-    // Handles permission result, not super sure of this stuff either
+
+    // Handles permission for location when first opening ap
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -106,12 +164,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 getLastKnownLocation()
             }
         } else {
-            // If denied moves to default location (gac)
+            // If denied, move to default location (GAC)
             moveToDefaultLocation()
         }
     }
 
-    // Move the camera to the default spot
+
+    // Move the camera to the default location
     private fun moveToDefaultLocation() {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f))
         mMap.addMarker(MarkerOptions().position(defaultLocation).title("Default Location"))
