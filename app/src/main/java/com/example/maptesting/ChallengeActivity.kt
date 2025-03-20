@@ -35,12 +35,14 @@ class ChallengeActivity : AppCompatActivity() {
         val submitButton = findViewById<Button>(R.id.submit_button)
         val title_text = findViewById<TextInputEditText>(R.id.title_input)
         val desc_text = findViewById<TextInputEditText>(R.id.textInputEditText)
+
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
+
         val photoView = findViewById<Button>(R.id.picture_view)
         photoView.setOnClickListener {
             val intent = Intent(this, PhotoActivity::class.java)
@@ -91,4 +93,6 @@ class ChallengeActivity : AppCompatActivity() {
         return prefs.getString("username", "")
     }*/
 
+
+    
 }

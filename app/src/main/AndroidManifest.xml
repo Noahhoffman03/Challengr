@@ -32,9 +32,9 @@
             </intent-filter>
         </activity>
 
+
         <activity android:name=".ChallengeActivity"/>
         <activity android:name=".PhotoActivity"/>
-
 
         <!--Contains the API key for the map to work. NEEDED, DO NOT MESS WITH -->
         <meta-data
