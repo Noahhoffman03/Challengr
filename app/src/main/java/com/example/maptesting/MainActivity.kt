@@ -1,9 +1,12 @@
 package com.example.maptesting
 
+
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -34,6 +37,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        val createChallengeButton: Button = findViewById(R.id.create_challenge)
+        createChallengeButton.setOnClickListener {
+            val intent = Intent(this, ChallengeActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -52,7 +61,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Add markers on clicking on the map
         mMap.setOnMapClickListener { latLng ->
-            mMap.addMarker(MarkerOptions().position(latLng).title("Pinned Location"))
+            val marker = mMap.addMarker(MarkerOptions().position(latLng).title("Pinned Location"))
+            mMap.setOnMarkerClickListener { clickedMarker ->
+                if (clickedMarker == marker) {
+                    val intent = Intent(this, ChallengeActivity::class.java)
+                    startActivity(intent)
+                }
+                true
+
+            }
         }
     }
 
