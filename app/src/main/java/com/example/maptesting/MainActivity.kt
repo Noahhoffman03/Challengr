@@ -1,10 +1,13 @@
 package com.example.maptesting
 
+//Ignore this is just links for resources for all the parts
+// measure lat and lonitude from dropped pin -  https://stackoverflow.com/questions/14208952/drag-and-drop-pin-on-google-map-manually-and-get-longitude-latitude-accordingl
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Location
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -62,33 +66,35 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Add markers on clicking on the map
         mMap.setOnMapClickListener { latLng ->
             val marker = mMap.addMarker(MarkerOptions().position(latLng).title("Pinned Location"))
+
             mMap.setOnMarkerClickListener { clickedMarker ->
                 if (clickedMarker == marker) {
-                    val intent = Intent(this, ChallengeActivity::class.java)
+                    // Pass latitude and longitude to ChallengeActivity
+                    val intent = Intent(this, ChallengeActivity::class.java).apply {
+                        putExtra("LATITUDE", latLng.latitude)
+                        putExtra("LONGITUDE", latLng.longitude)
+                    }
                     startActivity(intent)
                 }
                 true
-
             }
         }
     }
 
     // Get last known location and move camera when the app is open
+    @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if (location != null) {
                 val userLatLng = LatLng(location.latitude, location.longitude)
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 16f))
             } else {
-                // If location is not available sets to the default map location
                 moveToDefaultLocation()
             }
         }.addOnFailureListener {
-            // Or if permission is denied go to default place too
             moveToDefaultLocation()
         }
     }
-
 
     // Handles permission result, not super sure of this stuff either
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
