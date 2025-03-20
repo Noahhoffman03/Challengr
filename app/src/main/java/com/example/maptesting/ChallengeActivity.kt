@@ -104,6 +104,12 @@ class ChallengeActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        val photoView = findViewById<Button>(R.id.picture_view)
+        photoView.setOnClickListener {
+            val intent = Intent(this, PhotoActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun openCamera() {
