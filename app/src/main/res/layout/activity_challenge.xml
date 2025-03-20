@@ -12,21 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="192dp"
         android:text="Take Picture"
-        app:layout_constraintEnd_toEndOf="@+id/image_save"
+        app:layout_constraintEnd_toEndOf="@+id/pic_display"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/image_save"
+        app:layout_constraintStart_toStartOf="@+id/pic_display"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/image_save"
-        android:layout_width="301dp"
-        android:layout_height="271dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_take_picture"
-        app:layout_constraintVertical_bias="0.054"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
 
 
     <ImageButton
@@ -130,13 +119,14 @@
 
     <ImageView
         android:id="@+id/pic_display"
-        android:layout_width="401dp"
-        android:layout_height="242dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        android:layout_width="301dp"
+        android:layout_height="271dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_take_picture"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        app:layout_constraintVertical_bias="0.054"
+        app:srcCompat="@android:drawable/ic_menu_camera"/>
 
     <Button
         android:id="@+id/submit_button"
@@ -144,19 +134,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="submit"
-        app:layout_constraintBottom_toBottomOf="@+id/textInputLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/upload_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload Challenge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
