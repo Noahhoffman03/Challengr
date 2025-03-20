@@ -14,13 +14,15 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
+import java.net.URI
 
 // Challenge data class to hold challenge information
 data class Challenge(
     val title: String,
     val image: Uri?,
     val description: String,
-    val latitude: Double,  //stuff for coordinates
+
+    val latitude: Double,  //new stuff for coordinates
     val longitude: Double
 )
 
@@ -34,11 +36,9 @@ class ChallengeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge)
-
         val submitButton = findViewById<Button>(R.id.submit_button)
         val title_text = findViewById<TextInputEditText>(R.id.title_input)
         val desc_text = findViewById<TextInputEditText>(R.id.textInputEditText)
-
 
 
 
@@ -46,14 +46,13 @@ class ChallengeActivity : AppCompatActivity() {
         val latitude = intent.getDoubleExtra("LATITUDE", 0.0)
         val longitude = intent.getDoubleExtra("LONGITUDE", 0.0)
 
-
         //// ------- Extra stuff if we wanna display the coordinates
         // val locationTextView: TextView = findViewById(R.id.location_info)
         // locationTextView.text = "Challenge Location:\nLatitude: $latitude \nLongitude: $longitude"
 
 
 
-        // Handle back button
+        // Back button
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -99,4 +98,17 @@ class ChallengeActivity : AppCompatActivity() {
             challenges.add(newChal)
         }
     }
+    /*
+fun setTitle(context: Context, title: String) {
+    val prefs = context.getSharedPreferences("myAppPackage", 0)
+    val editor = prefs.edit();
+    editor.putString("Title", title);
+    editor.apply();
+}
+fun getTitle(context: Context): String? {
+    val prefs = context.getSharedPreferences("myAppPackage", 0)
+    return prefs.getString("username", "")
+}*/
+
+
 }
