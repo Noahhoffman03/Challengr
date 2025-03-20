@@ -51,7 +51,6 @@ class ChallengeActivity : AppCompatActivity() {
         // locationTextView.text = "Challenge Location:\nLatitude: $latitude \nLongitude: $longitude"
 
 
-
         // Back button
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
