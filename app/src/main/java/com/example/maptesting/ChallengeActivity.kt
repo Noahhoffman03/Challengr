@@ -59,7 +59,7 @@ class ChallengeActivity : AppCompatActivity() {
             finish()
         }
 
-        // Open photo activity
+
         val photoView = findViewById<Button>(R.id.picture_view)
         photoView.setOnClickListener {
             val intent = Intent(this, PhotoActivity::class.java)
@@ -70,32 +70,37 @@ class ChallengeActivity : AppCompatActivity() {
         imageView = findViewById(R.id.pic_display)
         val pick_photo = findViewById<Button>(R.id.btn_take_picture)
         var uriSave: Uri? = null
-
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                // Callback is invoked after the user selects a media item or closes the
+                // photo picker.
                 if (uri != null) {
                     Log.d("PhotoPicker", "Selected URI: $uri")
                     imageView.setImageURI(uri)
                     uriSave = uri
+
                 } else {
                     Log.d("PhotoPicker", "No media selected")
                 }
-            }
 
+
+            }
         pick_photo.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
+        //I think there was an issue with how this was setup so I changed it a little
         submitButton.setOnClickListener {
             val newChal = Challenge(
-                title_text.text.toString(),
-                uriSave,
-                desc_text.text.toString(),
-                latitude,
-                longitude
+                title_text.text.toString(), uriSave, desc_text.text.toString(), latitude, longitude
             )
             challenges.add(newChal)
         }
+
+
+
+
+
     }
     /*
 fun setTitle(context: Context, title: String) {
@@ -110,4 +115,5 @@ fun getTitle(context: Context): String? {
 }*/
 
 
+    
 }
