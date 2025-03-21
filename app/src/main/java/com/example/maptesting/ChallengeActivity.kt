@@ -16,14 +16,16 @@ import android.widget.ImageView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.textfield.TextInputEditText
 import java.net.URI
 public final data class Challenge(
     val title: String,
     val image: Uri?,
-    val description: String
+    val description: String,
+    val location: LatLng
 )
-var challenges = mutableListOf(Challenge("example", null, "example"))
+var challenges = mutableListOf(Challenge("example", null, "example", LatLng(0.0, 0.0)))
 
 class ChallengeActivity : AppCompatActivity() {
 
@@ -73,7 +75,7 @@ class ChallengeActivity : AppCompatActivity() {
         }
         submitButton.setOnClickListener{
             var newChal: Challenge
-            newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
+            newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString(), LatLng(0.0,0.0))
 
         }
 

@@ -2,6 +2,7 @@ package com.example.maptesting
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.content.Intent
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // Get last known location and move camera when the app is open
+    @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if (location != null) {

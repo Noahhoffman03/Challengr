@@ -5,9 +5,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.graphics.Camera
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
+import android.graphics.drawable.Drawable
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
@@ -74,10 +76,12 @@ class PhotoActivity : AppCompatActivity() {
                 val currentDate = format.format(Date())
                 val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "$currentDate-img.jpeg")
                 val opStream = FileOutputStream(file)
-
+                val filePath = file.getPath()
+                //val drawable = Drawable.createFromPath(filePath)
                 opStream.write(bytes)
-
                 opStream.close()
+
+                //textureView.setBackground(drawable)
 
                 image.close()
                 Toast.makeText(this@PhotoActivity, "Image Captured", Toast.LENGTH_SHORT).show()
@@ -88,7 +92,7 @@ class PhotoActivity : AppCompatActivity() {
                 openCamera()
             }
 
-            override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {
+            override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) { //look at this later
             }
 
             override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
@@ -105,6 +109,7 @@ class PhotoActivity : AppCompatActivity() {
                 capReq = cameraDevice.createCaptureRequest((CameraDevice.TEMPLATE_STILL_CAPTURE))
                 capReq.addTarget(imageReader.surface)
                 cameraCaptureSession.capture(capReq.build(), null, null)
+                textureView.lockCanvas()
 
             }
         }
