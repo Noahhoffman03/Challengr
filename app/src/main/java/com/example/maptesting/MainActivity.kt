@@ -7,6 +7,7 @@ import android.location.Location
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlin.math.abs
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -29,7 +31,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

@@ -9,6 +9,8 @@ import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -18,6 +20,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import java.net.URI
+import kotlin.math.abs
+
 public final data class Challenge(
     val title: String,
     val image: Uri?,
@@ -25,13 +29,17 @@ public final data class Challenge(
 )
 var challenges = mutableListOf(Challenge("example", null, "example"))
 
-class ChallengeActivity : AppCompatActivity() {
+class ChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     lateinit var imageView: ImageView
-
+    lateinit var gestureDetector: GestureDetector
+    companion object {
+        const val MIN_DISTANCE = 150
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge)
+        this.gestureDetector = GestureDetector(this, this )
         val submitButton = findViewById<Button>(R.id.submit_button)
         val title_text = findViewById<TextInputEditText>(R.id.title_input)
         val desc_text = findViewById<TextInputEditText>(R.id.textInputEditText)
@@ -81,6 +89,54 @@ class ChallengeActivity : AppCompatActivity() {
 
 
     }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return super.onTouchEvent(event)
+    }
+    override fun onDown(e: MotionEvent): Boolean {
+        TODO("Not yet implemented")
+        return false
+    }
+
+    override fun onShowPress(e: MotionEvent) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        TODO("Not yet implemented")
+        return false
+    }
+
+    override fun onScroll(
+        e1: MotionEvent?,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
+        TODO("Not yet implemented")
+    }
+    override fun onLongPress(e: MotionEvent) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        if (e1 == null) return false
+        val diffX = e2.x - e1.x
+
+        if (abs(diffX) > MIN_DISTANCE) {
+            if (diffX < 0) {
+                Log.d("Gesture", "Left Swipe Detected, launching ChallengeActivity")
+                val intent = Intent(this, ChallengeActivity::class.java)
+                startActivity(intent)
+            } else {
+                Log.d("Gesture", "Right Swipe Detected")
+            }
+            return true
+        }
+        return false
+    }
+
+
     /*
     fun setTitle(context: Context, title: String) {
         val prefs = context.getSharedPreferences("myAppPackage", 0)
