@@ -104,11 +104,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     // This loads all the current challenges
+    // TO UPDATE
+    //  - get from database
+    //  - load completed colors in different color
+    //  - Links to new page
     private fun loadExistingChallenges() {
         for (challenge in challenges) {
             val location = LatLng(challenge.latitude, challenge.longitude)
             mMap.addMarker(
-                MarkerOptions()
+                MarkerOptions() // This is the stuff that provides info on pin
                     .position(location)
                     .title(challenge.title)
                     .snippet(challenge.description)
@@ -122,7 +126,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     // Function to place pin for new challenge (in red)
     // Updated to only place one at a time
     private fun placeSingleRedPin(latLng: LatLng) {
-        // Remove the current  pin if it exists
+        // Remove the current  pin if placed
         redPinMarker?.remove()
 
         // Add new red pin
