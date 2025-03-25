@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -19,7 +21,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
-
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     //The default location (gac) if user denies location access for some reason
@@ -104,6 +105,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             moveToDefaultLocation()
         }
     }
+
 
     // Move the camera to the default spot
     private fun moveToDefaultLocation() {
