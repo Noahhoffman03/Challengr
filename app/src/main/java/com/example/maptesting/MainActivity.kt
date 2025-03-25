@@ -1,7 +1,9 @@
 package com.example.maptesting
 
 //Ignore this is just links for resources for all the parts
+// Stuff about pins (extra at bottom) - https://developers.google.com/maps/documentation/android-sdk/marker
 // measure lat and lonitude from dropped pin -  https://stackoverflow.com/questions/14208952/drag-and-drop-pin-on-google-map-manually-and-get-longitude-latitude-accordingl
+
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val defaultLocation = LatLng(44.3238, -93.9758) // Default location (GAC)
     private var redPinMarker: Marker? = null // Tracks the new challenge pin (red one)
 
+
     // Hardcoded challenges for testing map loading
     // REMOVE LATER --------------------------------------------
     var challenges = mutableListOf(
@@ -37,6 +40,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         Challenge("Challenge 2", null, "Second test challenge", 44.32407, -93.97552)
     )
     //---------------------------
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,11 +55,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        val createChallengeButton: Button = findViewById(R.id.create_challenge)
-        createChallengeButton.setOnClickListener {
-            val intent = Intent(this, ChallengeActivity::class.java)
-            startActivity(intent)
-        }
+
+
+        //"
+       // val createChallengeButton: Button = findViewById(R.id.create_challenge)
+     //   createChallengeButton.setOnClickListener {
+      //      val intent = Intent(this, ChallengeActivity::class.java)
+     //            startActivity(intent)
+      //  }
     }
 
 
