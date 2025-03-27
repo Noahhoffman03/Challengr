@@ -23,7 +23,7 @@ class ChallengeActivity : AppCompatActivity() {
     lateinit var imageView: ImageView
     private lateinit var challenge: Challenge
     private lateinit var user: User
-        /*
+    /*
         username = "Test",
         bio = "test Bio",
         mainLocation = "St. Peter, MN",
@@ -36,7 +36,6 @@ class ChallengeActivity : AppCompatActivity() {
         val submitButton = findViewById<Button>(R.id.submit_button)
         val title_text = findViewById<TextInputEditText>(R.id.title_input)
         val desc_text = findViewById<TextInputEditText>(R.id.textInputEditText)
-
 
 
         // Get latitude & longitude from intent thingy
@@ -86,7 +85,7 @@ class ChallengeActivity : AppCompatActivity() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        submitButton.setOnClickListener{
+        submitButton.setOnClickListener {
             challenge = Challenge(
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
@@ -96,11 +95,11 @@ class ChallengeActivity : AppCompatActivity() {
             )
 
 
-            lifecycleScope.launch{
-                firestoreClient.insertChallenge(challenge).collect{ id ->
-                    challenge = challenge.copy(id = id?: "")
+            lifecycleScope.launch {
+                firestoreClient.insertChallenge(challenge).collect { id ->
+                    challenge = challenge.copy(id = id ?: "")
                 }
-                firestoreClient.updateChallenge(challenge).collect{ result ->
+                firestoreClient.updateChallenge(challenge).collect { result ->
                     println(result)
                 }
 
@@ -120,24 +119,21 @@ class ChallengeActivity : AppCompatActivity() {
                 */
             }
 
-        //var newChal: Challenge
+            //var newChal: Challenge
             //newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
 
 
-        //I think there was an issue with how this was setup so I changed it a little
-        //submitButton.setOnClickListener {
-          //  val newChal = Challenge(
+            //I think there was an issue with how this was setup so I changed it a little
+            //submitButton.setOnClickListener {
+            //  val newChal = Challenge(
             //    title_text.text.toString(), uriSave, desc_text.text.toString(), latitude, longitude
             //)
             //challenges.add(newChal)
-        //}
+            //}
 
 
-
-
-
-    }
-    /*
+        }
+        /*
 fun setTitle(context: Context, title: String) {
     val prefs = context.getSharedPreferences("myAppPackage", 0)
     val editor = prefs.edit();
@@ -150,5 +146,5 @@ fun getTitle(context: Context): String? {
 }*/
 
 
-    
+    }
 }

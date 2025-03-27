@@ -36,8 +36,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     // Hardcoded challenges for testing map loading
     // REMOVE LATER --------------------------------------------
     var challenges = mutableListOf(
-        Challenge("Challenge 1", null, "First test challenge", 44.32295, -93.97234),
-        Challenge("Challenge 2", null, "Second test challenge", 44.32407, -93.97552)
+        Challenge(
+            title ="Challenge 1",
+            photo = null,
+            desc = "First test challenge",
+            lat =44.32295,
+            lng = -93.97234),
+        Challenge(
+            title = "Challenge 2",
+            photo =  null,
+            desc = "Second test challenge",
+            lat = 44.32407,
+            lng = -93.97552)
     )
     //---------------------------
 
@@ -110,12 +120,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     //  - Links to new page
     private fun loadExistingChallenges() {
         for (challenge in challenges) {
-            val location = LatLng(challenge.latitude, challenge.longitude)
+            val location = LatLng(challenge.lat, challenge.lng)
             mMap.addMarker(
                 MarkerOptions() // This is the stuff that provides info on pin
                     .position(location)
                     .title(challenge.title)
-                    .snippet(challenge.description)
+                    .snippet(challenge.desc)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)) // Makes the pin blue
             )
         }
