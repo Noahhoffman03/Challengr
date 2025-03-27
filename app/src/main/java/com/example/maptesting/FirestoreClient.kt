@@ -7,12 +7,14 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import java.io.File
 
 class FirestoreClient {
 
     private val tag = "FirestoreClient"
     private val db = FirebaseFirestore.getInstance()
     private val collection = "Users"
+    private val collection2 = "Challenges"
 
 
     fun insertUser(
@@ -68,7 +70,9 @@ class FirestoreClient {
             "id" to id,
             "username" to username,
             "bio" to bio,
-            "mainLocation" to mainLocation
+            "mainLocation" to mainLocation,
+            "password" to password,
+            "email" to email
         )
     }
 
@@ -77,7 +81,9 @@ class FirestoreClient {
             id = this["id"] as String,
             username = this["username"] as String,
             bio = this["bio"] as String,
-            mainLocation = this["mainLocation"] as String
+            mainLocation = this["mainLocation"] as String,
+            password = this["password"] as String,
+            email = this["email"] as String
             //firestore stashes numbers as long
         )
     }
@@ -113,5 +119,112 @@ class FirestoreClient {
             awaitClose{}
 
         }
+
+    }fun insertChallenge(
+        challenge: Challenge
+    ): Flow<String?> {
+        return callbackFlow {
+            db.collection((collection2))
+                .add(challenge.toHashMap())
+                .addOnSuccessListener { document ->
+                    println(tag + "inserted challenge")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        updateChallenge(challenge).collect{}
+                    }
+                    trySend(document.id)
+                }
+
+                .addOnFailureListener {
+                    println(tag + "insert challenge error")
+                    trySend(null)
+                }
+
+            awaitClose{}
+
+        }
     }
+
+
+    fun updateChallenge(
+        challenge: Challenge
+    ): Flow<Boolean> {
+        return callbackFlow {
+            db.collection((collection2))
+                .document(challenge.id)
+                .set(challenge.toHashMap())
+                .addOnSuccessListener {
+                    println(tag + "update challenge with id")
+                    trySend(true)
+                }
+
+                .addOnFailureListener {
+                    println(tag + "update challenge error")
+                    trySend(false)
+                }
+
+            awaitClose{}
+
+        }
+    }
+
+
+    private fun Challenge.toHashMap(): HashMap<String, Any?>{
+        return hashMapOf(
+            "id" to id,
+            "creatorId" to creatorId,
+            "title" to title,
+            "desc" to desc,
+            "photo" to photo,
+            "lat" to lat,
+            "lng" to lng
+        )
+    }
+
+    private fun Map<String, Any>.toChallenge(): Challenge{
+        return Challenge(
+            id = this["id"] as String,
+            creatorId = this["creatorId"] as String,
+            title = this["title"] as String,
+            desc = this["desc"] as String,
+            photo = this["photo"] as File?,
+            lat = this["lat"] as Double,
+            lng = this["lng"] as Double
+            //firestore stashes numbers as long
+        )
+    }
+    fun getChallenge(
+        title: String
+    ): Flow<Challenge?> {
+        return callbackFlow {
+            db.collection((collection2))
+                .get()
+                .addOnSuccessListener { result ->
+                    var challenge: Challenge? = null
+
+                    for (document in result) {
+                        if (document.data["title"] == title) {
+                            println(tag + "challenge found")
+                            challenge = document.data.toChallenge()
+                            trySend(challenge)
+                            break
+                        }
+                    }
+                    if (challenge == null){
+                        println(tag + "challenge not found")
+                        trySend(null)
+                    }
+
+                }
+
+                .addOnFailureListener {
+                    println(tag + "insert getting error")
+                    trySend(null)
+                }
+
+            awaitClose{}
+
+        }
+    }
+
+
 }
