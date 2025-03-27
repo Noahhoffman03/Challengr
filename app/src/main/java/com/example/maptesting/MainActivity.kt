@@ -1,6 +1,5 @@
 package com.example.maptesting
 
-
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
@@ -19,7 +18,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
-
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     //The default location (gac) if user denies location access for some reason
