@@ -16,7 +16,9 @@ import android.widget.ImageView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
 import java.net.URI
 public final data class Challenge(
     val title: String,
@@ -26,9 +28,13 @@ public final data class Challenge(
 var challenges = mutableListOf(Challenge("example", null, "example"))
 
 class ChallengeActivity : AppCompatActivity() {
-
+    val firestoreClient = FirestoreClient()
     lateinit var imageView: ImageView
-
+    private var user = User(
+        username = "Test",
+        bio = "test Bio",
+        mainLocation = "St. Peter, MN"
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge)
@@ -72,8 +78,34 @@ class ChallengeActivity : AppCompatActivity() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         submitButton.setOnClickListener{
-            var newChal: Challenge
-            newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
+            lifecycleScope.launch{
+                firestoreClient.insertUser(user).collect{ id ->
+                    user = user.copy(id = id?: "")
+
+
+                }
+                firestoreClient.updateUser(user).collect{ result ->
+                    println(result)
+                }
+
+                //get code
+                /*
+                firestoreClient.getUser(user.username).collect{ result ->
+                    if (result!= null){
+                        printLn("user got")
+                        //id = user.id
+                        //username = user.username
+                        //etc
+                    }
+                    else{
+                        println("no user")
+                    }
+                }
+                */
+            }
+
+        //var newChal: Challenge
+            //newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
 
         }
 
