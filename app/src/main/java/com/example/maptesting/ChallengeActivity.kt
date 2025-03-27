@@ -34,7 +34,7 @@ class ChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     lateinit var imageView: ImageView
     lateinit var gestureDetector: GestureDetector
     companion object {
-        const val MIN_DISTANCE = 150
+        const val MIN_DISTANCE = 50
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +91,9 @@ class ChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (event != null) {
+            return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+        }
         return super.onTouchEvent(event)
     }
     override fun onDown(e: MotionEvent): Boolean {
@@ -122,12 +125,14 @@ class ChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener
     override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
         if (e1 == null) return false
         val diffX = e2.x - e1.x
+        val diffY = e2.y - e1.y
 
-        if (abs(diffX) > MIN_DISTANCE) {
+        if (abs(diffX) > abs(diffY) && abs(diffX) > MIN_DISTANCE && abs(velocityX) > 100) {
             if (diffX < 0) {
                 Log.d("Gesture", "Left Swipe Detected, launching ChallengeActivity")
-                val intent = Intent(this, ChallengeActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             } else {
                 Log.d("Gesture", "Right Swipe Detected")
             }
