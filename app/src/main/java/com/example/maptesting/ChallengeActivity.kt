@@ -47,7 +47,6 @@ class ChallengeActivity : AppCompatActivity() {
         val desc_text = findViewById<TextInputEditText>(R.id.textInputEditText)
 
 
-
         // Get latitude & longitude from intent thingy
         val latitude = intent.getDoubleExtra("LATITUDE", 0.0)
         val longitude = intent.getDoubleExtra("LONGITUDE", 0.0)
@@ -95,62 +94,21 @@ class ChallengeActivity : AppCompatActivity() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        submitButton.setOnClickListener{
-            lifecycleScope.launch{
-                firestoreClient.insertUser(user).collect{ id ->
-                    user = user.copy(id = id?: "")
+        submitButton.setOnClickListener {
+            lifecycleScope.launch {
+                firestoreClient.insertUser(user).collect { id ->
+                    user = user.copy(id = id ?: "")
 
 
                 }
-                firestoreClient.updateUser(user).collect{ result ->
+                firestoreClient.updateUser(user).collect { result ->
                     println(result)
                 }
 
-                //get code
-                /*
-                firestoreClient.getUser(user.username).collect{ result ->
-                    if (result!= null){
-                        printLn("user got")
-                        //id = user.id
-                        //username = user.username
-                        //etc
-                    }
-                    else{
-                        println("no user")
-                    }
-                }
-                */
+
             }
 
-        //var newChal: Challenge
-            //newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
-
-
-        //I think there was an issue with how this was setup so I changed it a little
-        //submitButton.setOnClickListener {
-          //  val newChal = Challenge(
-            //    title_text.text.toString(), uriSave, desc_text.text.toString(), latitude, longitude
-            //)
-            //challenges.add(newChal)
-        //}
-
-
-
-
-
+        }
+      
     }
-    /*
-fun setTitle(context: Context, title: String) {
-    val prefs = context.getSharedPreferences("myAppPackage", 0)
-    val editor = prefs.edit();
-    editor.putString("Title", title);
-    editor.apply();
-}
-fun getTitle(context: Context): String? {
-    val prefs = context.getSharedPreferences("myAppPackage", 0)
-    return prefs.getString("username", "")
-}*/
-
-
-    
 }

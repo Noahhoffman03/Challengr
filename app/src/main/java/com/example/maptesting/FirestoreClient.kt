@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 
+
 class FirestoreClient {
 
     private val tag = "FirestoreClient"
     private val db = FirebaseFirestore.getInstance()
     private val collection = "Users"
-
 
     fun insertUser(
         user: User
@@ -28,17 +28,13 @@ class FirestoreClient {
                     }
                     trySend(document.id)
                 }
-
                 .addOnFailureListener {
                     println(tag + "insert user error")
                     trySend(null)
                 }
-
             awaitClose{}
-
         }
     }
-
 
     fun updateUser(
         user: User
@@ -51,19 +47,15 @@ class FirestoreClient {
                     println(tag + "update user with id")
                     trySend(true)
                 }
-
                 .addOnFailureListener {
                     println(tag + "update user error")
                     trySend(false)
                 }
-
             awaitClose{}
-
         }
     }
 
-
-    private fun User.toHashMap(): HashMap<String, Any>{
+    private fun User.toHashMap(): HashMap<String, Any> {
         return hashMapOf(
             "id" to id,
             "username" to username,
@@ -72,15 +64,15 @@ class FirestoreClient {
         )
     }
 
-    private fun Map<String, Any>.toUser(): User{
+    private fun Map<String, Any>.toUser(): User {
         return User(
             id = this["id"] as String,
             username = this["username"] as String,
             bio = this["bio"] as String,
             mainLocation = this["mainLocation"] as String
-            //firestore stashes numbers as long
         )
     }
+
     fun getUser(
         username: String
     ): Flow<User?> {
@@ -102,16 +94,29 @@ class FirestoreClient {
                         println(tag + "user not found")
                         trySend(null)
                     }
-
                 }
-
                 .addOnFailureListener {
                     println(tag + "insert getting error")
                     trySend(null)
                 }
-
             awaitClose{}
+        }
+    }
 
+    // Added function to fetch challenges from Firestore
+    fun getChallenges(): Flow<List<Challenge>> {
+        return callbackFlow {
+            db.collection("challenges")
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val challengeList = snapshot.documents.mapNotNull { it.toObject(Challenge::class.java) }
+                    trySend(challengeList) // Emit the list of challenges
+                }
+                .addOnFailureListener {
+                    println(tag + "Error getting challenges")
+                    trySend(emptyList()) // Emit an empty list on failure
+                }
+            awaitClose{}
         }
     }
 }
