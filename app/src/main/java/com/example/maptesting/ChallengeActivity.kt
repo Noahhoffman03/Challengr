@@ -2,17 +2,14 @@ package com.example.maptesting
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.BitmapFactory
-import android.location.Location
-import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -40,12 +37,25 @@ class ChallengeActivity : AppCompatActivity() {
         val title_text = findViewById<TextInputEditText>(R.id.title_input)
         val desc_text = findViewById<TextInputEditText>(R.id.textInputEditText)
 
+
+
+        // Get latitude & longitude from intent thingy
+        val latitude = intent.getDoubleExtra("LATITUDE", 0.0)
+        val longitude = intent.getDoubleExtra("LONGITUDE", 0.0)
+
+        //// ------- Extra stuff if we wanna display the coordinates
+        // val locationTextView: TextView = findViewById(R.id.location_info)
+        // locationTextView.text = "Challenge Location:\nLatitude: $latitude \nLongitude: $longitude"
+
+
+        // Back button
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
+
 
         val photoView = findViewById<Button>(R.id.picture_view)
         photoView.setOnClickListener {
@@ -75,6 +85,7 @@ class ChallengeActivity : AppCompatActivity() {
         pick_photo.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+
         submitButton.setOnClickListener{
             challenge = Challenge(
                 title = title_text.text.toString(),
@@ -112,25 +123,32 @@ class ChallengeActivity : AppCompatActivity() {
         //var newChal: Challenge
             //newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
 
-        }
+
+        //I think there was an issue with how this was setup so I changed it a little
+        //submitButton.setOnClickListener {
+          //  val newChal = Challenge(
+            //    title_text.text.toString(), uriSave, desc_text.text.toString(), latitude, longitude
+            //)
+            //challenges.add(newChal)
+        //}
+
 
 
 
 
     }
     /*
-    fun setTitle(context: Context, title: String) {
-        val prefs = context.getSharedPreferences("myAppPackage", 0)
-        val editor = prefs.edit();
-        editor.putString("Title", title);
-        editor.apply();
-    }
-    fun getTitle(context: Context): String? {
-        val prefs = context.getSharedPreferences("myAppPackage", 0)
-        return prefs.getString("username", "")
-    }*/
+fun setTitle(context: Context, title: String) {
+    val prefs = context.getSharedPreferences("myAppPackage", 0)
+    val editor = prefs.edit();
+    editor.putString("Title", title);
+    editor.apply();
+}
+fun getTitle(context: Context): String? {
+    val prefs = context.getSharedPreferences("myAppPackage", 0)
+    return prefs.getString("username", "")
+}*/
 
 
     
 }
-
