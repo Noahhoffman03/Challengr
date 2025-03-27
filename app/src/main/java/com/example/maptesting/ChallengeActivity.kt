@@ -20,21 +20,19 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import java.net.URI
-public final data class Challenge(
-    val title: String,
-    val image: Uri?,
-    val description: String
-)
-var challenges = mutableListOf(Challenge("example", null, "example"))
 
 class ChallengeActivity : AppCompatActivity() {
     val firestoreClient = FirestoreClient()
     lateinit var imageView: ImageView
-    private var user = User(
+    private lateinit var challenge: Challenge
+    private lateinit var user: User
+        /*
         username = "Test",
         bio = "test Bio",
-        mainLocation = "St. Peter, MN"
-    )
+        mainLocation = "St. Peter, MN",
+        password = "TestPassword"
+    )*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge)
@@ -78,19 +76,26 @@ class ChallengeActivity : AppCompatActivity() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         submitButton.setOnClickListener{
+            challenge = Challenge(
+                title = title_text.text.toString(),
+                desc = desc_text.text.toString(),
+                photo = null,
+                lat = 0.00,
+                lng = 0.00
+            )
+
+
             lifecycleScope.launch{
-                firestoreClient.insertUser(user).collect{ id ->
-                    user = user.copy(id = id?: "")
-
-
+                firestoreClient.insertChallenge(challenge).collect{ id ->
+                    challenge = challenge.copy(id = id?: "")
                 }
-                firestoreClient.updateUser(user).collect{ result ->
+                firestoreClient.updateChallenge(challenge).collect{ result ->
                     println(result)
                 }
 
                 //get code
                 /*
-                firestoreClient.getUser(user.username).collect{ result ->
+                user = firestoreClient.getUser(user.username).collect{ result ->
                     if (result!= null){
                         printLn("user got")
                         //id = user.id
