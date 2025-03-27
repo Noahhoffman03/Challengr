@@ -5,6 +5,7 @@ package com.example.maptesting
 // measure lat and lonitude from dropped pin -  https://stackoverflow.com/questions/14208952/drag-and-drop-pin-on-google-map-manually-and-get-longitude-latitude-accordingl
 
 
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -26,7 +27,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
-
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val defaultLocation = LatLng(44.3238, -93.9758) // Default location (GAC)
