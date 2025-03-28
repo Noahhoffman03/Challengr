@@ -21,23 +21,18 @@ class FirestoreClient {
         user: User
     ): Flow<String?> {
         return callbackFlow {
-            db.collection((collection))
+            db.collection(collection)
                 .add(user.toHashMap())
                 .addOnSuccessListener { document ->
                     println(tag + "inserted user")
-                    CoroutineScope(Dispatchers.IO).launch {
-                        updateUser(user).collect{}
-                    }
                     trySend(document.id)
                 }
-
                 .addOnFailureListener {
                     println(tag + "insert user error")
                     trySend(null)
                 }
 
             awaitClose{}
-
         }
     }
 
@@ -46,26 +41,24 @@ class FirestoreClient {
         user: User
     ): Flow<Boolean> {
         return callbackFlow {
-            db.collection((collection))
+            db.collection(collection)
                 .document(user.id)
                 .set(user.toHashMap())
                 .addOnSuccessListener {
                     println(tag + "update user with id")
                     trySend(true)
                 }
-
                 .addOnFailureListener {
                     println(tag + "update user error")
                     trySend(false)
                 }
 
             awaitClose{}
-
         }
     }
 
 
-    private fun User.toHashMap(): HashMap<String, Any>{
+    private fun User.toHashMap(): HashMap<String, Any> {
         return hashMapOf(
             "id" to id,
             "username" to username,
@@ -76,7 +69,7 @@ class FirestoreClient {
         )
     }
 
-    private fun Map<String, Any>.toUser(): User{
+    private fun Map<String, Any>.toUser(): User {
         return User(
             id = this["id"] as String,
             username = this["username"] as String,
@@ -84,14 +77,14 @@ class FirestoreClient {
             mainLocation = this["mainLocation"] as String,
             password = this["password"] as String,
             email = this["email"] as String
-            //firestore stashes numbers as long
         )
     }
+
     fun getUser(
         username: String
     ): Flow<User?> {
         return callbackFlow {
-            db.collection((collection))
+            db.collection(collection)
                 .get()
                 .addOnSuccessListener { result ->
                     var user: User? = null
@@ -104,71 +97,60 @@ class FirestoreClient {
                             break
                         }
                     }
-                    if (user == null){
+                    if (user == null) {
                         println(tag + "user not found")
                         trySend(null)
                     }
-
                 }
-
                 .addOnFailureListener {
-                    println(tag + "insert getting error")
+                    println(tag + "get user error")
                     trySend(null)
                 }
 
             awaitClose{}
-
         }
+    }
 
-    }fun insertChallenge(
+    fun insertChallenge(
         challenge: Challenge
     ): Flow<String?> {
         return callbackFlow {
-            db.collection((collection2))
+            db.collection(collection2)
                 .add(challenge.toHashMap())
                 .addOnSuccessListener { document ->
                     println(tag + "inserted challenge")
-                    CoroutineScope(Dispatchers.IO).launch {
-                        updateChallenge(challenge).collect{}
-                    }
                     trySend(document.id)
                 }
-
                 .addOnFailureListener {
                     println(tag + "insert challenge error")
                     trySend(null)
                 }
 
             awaitClose{}
-
         }
     }
-
 
     fun updateChallenge(
         challenge: Challenge
     ): Flow<Boolean> {
         return callbackFlow {
-            db.collection((collection2))
+            db.collection(collection2)
                 .document(challenge.id)
                 .set(challenge.toHashMap())
                 .addOnSuccessListener {
                     println(tag + "update challenge with id")
                     trySend(true)
                 }
-
                 .addOnFailureListener {
                     println(tag + "update challenge error")
                     trySend(false)
                 }
 
             awaitClose{}
-
         }
     }
 
-
-    private fun Challenge.toHashMap(): HashMap<String, Any?>{
+    private fun Challenge.toHashMap(): HashMap<String, Any?> {
         return hashMapOf(
             "id" to id,
             "creatorId" to creatorId,
@@ -180,7 +162,7 @@ class FirestoreClient {
         )
     }
 
-    private fun Map<String, Any>.toChallenge(): Challenge{
+    private fun Map<String, Any>.toChallenge(): Challenge {
         return Challenge(
             id = this["id"] as String,
             creatorId = this["creatorId"] as String,
@@ -189,14 +171,14 @@ class FirestoreClient {
             photo = this["photo"] as File?,
             lat = this["lat"] as Double,
             lng = this["lng"] as Double
-            //firestore stashes numbers as long
         )
     }
+
     fun getChallenge(
         title: String
     ): Flow<Challenge?> {
         return callbackFlow {
-            db.collection((collection2))
+            db.collection(collection2)
                 .get()
                 .addOnSuccessListener { result ->
                     var challenge: Challenge? = null
@@ -209,22 +191,17 @@ class FirestoreClient {
                             break
                         }
                     }
-                    if (challenge == null){
+                    if (challenge == null) {
                         println(tag + "challenge not found")
                         trySend(null)
                     }
-
                 }
-
                 .addOnFailureListener {
-                    println(tag + "insert getting error")
+                    println(tag + "get challenge error")
                     trySend(null)
                 }
 
             awaitClose{}
-
         }
     }
-
-
 }
