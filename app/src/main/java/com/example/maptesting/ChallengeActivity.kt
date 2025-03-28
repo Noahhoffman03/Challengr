@@ -90,8 +90,8 @@ class ChallengeActivity : AppCompatActivity() {
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
                 photo = null,
-                lat = 0.00,
-                lng = 0.00
+                lat = latitude,
+                lng = longitude
             )
 
 
