@@ -14,10 +14,10 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
-import java.net.URI
 
 class ChallengeActivity : AppCompatActivity() {
     val firestoreClient = FirestoreClient()
@@ -42,6 +42,10 @@ class ChallengeActivity : AppCompatActivity() {
         // Get latitude & longitude from intent thingy
         val latitude = intent.getDoubleExtra("LATITUDE", 0.0)
         val longitude = intent.getDoubleExtra("LONGITUDE", 0.0)
+
+        //get pic uri from intent
+
+        val picTakenFile = intent.getStringExtra("uri_save")?.toUri()?.toFile()
 
         //// ------- Extra stuff if we wanna display the coordinates
         // val locationTextView: TextView = findViewById(R.id.location_info)
@@ -88,9 +92,10 @@ class ChallengeActivity : AppCompatActivity() {
 
         submitButton.setOnClickListener {
             challenge = Challenge(
+                creatorId = user.id,
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
-                photo = uriSave?.toFile(),
+                photo = picTakenFile,
                 lat = latitude,
                 lng = longitude
             )

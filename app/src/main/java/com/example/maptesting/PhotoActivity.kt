@@ -14,6 +14,7 @@ import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
 import android.hardware.camera2.MultiResolutionImageReader
 import android.media.ImageReader
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -26,6 +27,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -44,6 +46,7 @@ class PhotoActivity : AppCompatActivity() {
     lateinit var cameraDevice: CameraDevice
     lateinit var captureRequest: CaptureRequest
     lateinit var imageReader: ImageReader
+    var uri_save: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +56,9 @@ class PhotoActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             val intent = Intent(this, ChallengeActivity::class.java)
             startActivity(intent)
+            if(uri_save != null) { //if the uri save exists, bring it with back to the challenge page
+                intent.putExtra("uri_save", uri_save.toString())
+            }
             finish()
         }
         getPermissions()
@@ -64,27 +70,40 @@ class PhotoActivity : AppCompatActivity() {
         handler = Handler((handlerThread).looper)
 
         imageReader = ImageReader.newInstance(1080, 1980, ImageFormat.JPEG, 1)
+
+        //when the image is available to be read
         imageReader.setOnImageAvailableListener(object : ImageReader.OnImageAvailableListener {
             override fun onImageAvailable(p0: ImageReader?) {
+                //get the image
                 val image = p0?.acquireLatestImage()
+                //create a by
                 val buffer = image!!.planes[0].buffer
+                //image to bytes
                 val bytes = ByteArray(buffer.remaining())
                 buffer.get(bytes)
+                //date format for saving files
                 val format = SimpleDateFormat("dd/M/yyyy hh:mm:ss", Locale("en", "US"))
+                //get the current date in desired format
                 val currentDate = format.format(Date())
+                //turn it into a file
                 val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "$currentDate-img.jpeg")
+                //create output stream
                 val opStream = FileOutputStream(file)
-
+                uri_save = file.toUri()
+                //write the output
                 opStream.write(bytes)
 
                 opStream.close()
 
                 image.close()
-                Toast.makeText(this@PhotoActivity, "Image Captured", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@PhotoActivity, "Image Captured", Toast.LENGTH_SHORT).show()
             }
         }, handler)
+        //initiate texture view as a listener
         textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+            //when texture view surface is available
             override fun onSurfaceTextureAvailable(p0: SurfaceTexture, p1: Int, p2: Int) {
+                //open the camera
                 openCamera()
             }
 
@@ -100,17 +119,21 @@ class PhotoActivity : AppCompatActivity() {
 
 
         }
+        //set take picture button to take the picture
         findViewById<Button>(R.id.btn_take_picture).apply {
             setOnClickListener {
+                //create capture request on current camera device
                 capReq = cameraDevice.createCaptureRequest((CameraDevice.TEMPLATE_STILL_CAPTURE))
+                //add the imagereader surface as a target
                 capReq.addTarget(imageReader.surface)
-                cameraCaptureSession.capture(capReq.build(), null, null)
-
+                //capture the image
+                cameraCaptureSession.capture(capReq.build(), null, handler)
             }
         }
     }
-
+    //fun to open camera
     private fun openCamera() {
+        //check permissions
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CAMERA
@@ -118,10 +141,11 @@ class PhotoActivity : AppCompatActivity() {
         ) {
             getPermissions()
         }
+        //use camera manager to open camera
         cameraManager.openCamera(cameraManager.cameraIdList[0], object: CameraDevice.StateCallback(){
             override fun onOpened(p0: CameraDevice) {
                 cameraDevice = p0
-
+                //create a capture request
                 capReq = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
                 var surface = Surface(textureView.surfaceTexture)
                 capReq.addTarget(surface)
