@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setOnMarkerClickListener { marker ->
             val challenge = marker.tag as? Challenge // Assuming you've set the challenge as the marker's tag
             if (challenge != null) {
-                val intent = Intent(this, ChallengeActivity::class.java)
+                val intent = Intent(this, CurrentChallengePage::class.java)
                 intent.putExtra("CHALLENGE_TITLE", challenge.title)
                 intent.putExtra("CHALLENGE_DESC", challenge.desc)
                 intent.putExtra("CHALLENGE_PHOTO", challenge.photo?.path) // or URL if stored in Firebase storage
@@ -74,9 +74,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    /**
-     * Fetches challenges from Firestore and adds them as blue markers on the map.
-     */
+
+    //Loads challenges from database onto map in blue
     private fun loadExistingChallenges() {
         firestore.collection("Challenges") // Assuming the collection name is "Challenges"
             .get()
@@ -113,7 +112,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
-    // Function to place pin for new challenge (in red)
+    // Function to place pin for new challenge (red pin)
     private fun placeSingleRedPin(latLng: LatLng) {
         redPinMarker?.remove()
         redPinMarker = mMap.addMarker(
