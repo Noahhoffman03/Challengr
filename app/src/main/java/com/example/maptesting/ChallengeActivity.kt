@@ -98,37 +98,30 @@ class ChallengeActivity : AppCompatActivity() {
                     println(result)
                 }
 
-                //get code
-                /*
-                user = firestoreClient.getUser(user.username).collect{ result ->
-                    if (result!= null){
-                        printLn("user got")
-                        //id = user.id
-                        //username = user.username
-                        //etc
-                    }
-                    else{
-                        println("no user")
-                    }
-                }
-                */
+
             }
 
-            finish() // takes you back to the previous page
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+             // goes back to the previous page
 
 
 
-            //var newChal: Challenge
-            //newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
-
-
-            //I think there was an issue with how this was setup so I changed it a little
-            //submitButton.setOnClickListener {
-            //  val newChal = Challenge(
-            //    title_text.text.toString(), uriSave, desc_text.text.toString(), latitude, longitude
-            //)
-            //challenges.add(newChal)
-            //}
+            //Code that gets something from the database
+            /*
+            user = firestoreClient.getUser(user.username).collect{ result ->
+                if (result!= null){
+                    printLn("user got")
+                    //id = user.id
+                    //username = user.username
+                    //etc
+                }
+                else{
+                    println("no user")
+                }
+            }
+            */
         }
     }
 }
