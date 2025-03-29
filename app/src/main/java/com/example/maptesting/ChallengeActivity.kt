@@ -23,12 +23,7 @@ class ChallengeActivity : AppCompatActivity() {
     lateinit var imageView: ImageView
     private lateinit var challenge: Challenge
     private lateinit var user: User
-    /*
-        username = "Test",
-        bio = "test Bio",
-        mainLocation = "St. Peter, MN",
-        password = "TestPassword"
-    )*/
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,6 +114,10 @@ class ChallengeActivity : AppCompatActivity() {
                 */
             }
 
+            finish() // takes you back to the previous page
+
+
+
             //var newChal: Challenge
             //newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
 
@@ -130,21 +129,6 @@ class ChallengeActivity : AppCompatActivity() {
             //)
             //challenges.add(newChal)
             //}
-
-
         }
-        /*
-fun setTitle(context: Context, title: String) {
-    val prefs = context.getSharedPreferences("myAppPackage", 0)
-    val editor = prefs.edit();
-    editor.putString("Title", title);
-    editor.apply();
-}
-fun getTitle(context: Context): String? {
-    val prefs = context.getSharedPreferences("myAppPackage", 0)
-    return prefs.getString("username", "")
-}*/
-
-
     }
 }

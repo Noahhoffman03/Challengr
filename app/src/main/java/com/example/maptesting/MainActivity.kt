@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -24,9 +25,9 @@ import java.io.File
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val firestore = FirebaseFirestore.getInstance() // Firestore instance
+    private val firestore = FirebaseFirestore.getInstance() // Firestore thingy
     private val defaultLocation = LatLng(44.3238, -93.9758) // Default location (GAC)
-    private var redPinMarker: Marker? = null // Tracks the new challenge pin (red one)
+    private var newchalPinMarker: Marker? = null // Tracks the new challenge pin (red)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,79 +51,108 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
         }
 
-        // Load challenges from Firestore
+        // Load challenges
         loadExistingChallenges()
 
-        // Handle user clicks to place a pin
+        // Handle user clicks to place a new challenge pin
         mMap.setOnMapClickListener { latLng ->
             placeSingleRedPin(latLng)
         }
 
-        // Click the pin opens new challenge page
+        // Click listener for challenge pins
         mMap.setOnMarkerClickListener { marker ->
-            val challenge = marker.tag as? Challenge // Assuming you've set the challenge as the marker's tag
-            if (challenge != null) {
-                val intent = Intent(this, CurrentChallengePage::class.java)
-                intent.putExtra("CHALLENGE_TITLE", challenge.title)
-                intent.putExtra("CHALLENGE_DESC", challenge.desc)
-                intent.putExtra("CHALLENGE_PHOTO", challenge.photo?.path) // or URL if stored in Firebase storage
-                startActivity(intent)
-                true
-            } else {
-                false
+            when {
+                marker == newchalPinMarker -> {
+                    // Clicking the red pin starts ChallengeActivity
+                    startChallengeActivity(marker.position)
+                    true
+                }
+                marker.tag is Challenge -> {
+                    // Log challenge data
+                    val challenge = marker.tag as Challenge
+                    Log.d("MarkerClick", "Challenge clicked: $challenge")
+                    startCurrentChallengeActivity(challenge)
+                    true
+                }
+                else -> false
             }
         }
     }
 
 
-    //Loads challenges from database onto map in blue
+    // Loads challenges from database as blue pins
+    //Probably an easier way of doing this (Iteration 3)?
     private fun loadExistingChallenges() {
-        firestore.collection("Challenges") // Assuming the collection name is "Challenges"
+
+        firestore.collection("Challenges") //for the collection
             .get()
             .addOnSuccessListener { documents ->
-                for (document in documents) {
+                for (document in documents) { //Loop to get the attributes
                     val id = document.id
                     val creatorId = document.getString("creatorId") ?: "Unknown"
                     val title = document.getString("title") ?: "No Title"
                     val desc = document.getString("desc") ?: "No Description"
                     val lat = document.getDouble("lat") ?: 0.0
                     val lng = document.getDouble("lng") ?: 0.0
-                    val photoPath = document.getString("photo") // Stored as a path or URL in Firestore
+                    val photoPath = document.getString("photo")
 
                     // Convert Firestore photo path to a File (assuming local storage)
                     val photoFile = photoPath?.let { File(it) }
 
-                    // Create Challenge object (optional)
+                    // Create Challenge object
                     val challenge = Challenge(id, creatorId, title, desc, photoFile, lat, lng)
 
-                    // Place challenge pin on the map
+
+                    // Places challenge pin on the map
                     val location = LatLng(lat, lng)
                     val marker = mMap.addMarker(
                         MarkerOptions()
                             .position(location)
-                            .title(title)
-                            .snippet(desc)
+                            .title(title) // Not sure how to get this to perma show
+                            .snippet(desc) // ^ This either
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                     )
-                    marker?.tag = challenge // Set challenge data as the marker's tag
+                    marker?.tag = challenge // Sets tag for when its clicked on
                 }
             }
-            .addOnFailureListener {
+            .addOnFailureListener { //This was from online probably dont need
                 Toast.makeText(this, "Failed to load challenges from Firestore.", Toast.LENGTH_SHORT).show()
             }
+
     }
 
-    // Function to place pin for new challenge (red pin)
+    //Placing pin for new challenge
+    //Only places one at a time and in red
     private fun placeSingleRedPin(latLng: LatLng) {
-        redPinMarker?.remove()
-        redPinMarker = mMap.addMarker(
+        newchalPinMarker?.remove()
+        newchalPinMarker = mMap.addMarker(
             MarkerOptions()
                 .position(latLng)
-                .title("New Challenge Location")
+                .title("New Challenge Location") // Doesn't show up ever, but bugs out on my computer if missing
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
         )
     }
 
+    //opens the new challenge page
+    private fun startChallengeActivity(location: LatLng) {
+        val intent = Intent(this, ChallengeActivity::class.java)
+        intent.putExtra("LATITUDE", location.latitude) //brings stuff for coords
+        intent.putExtra("LONGITUDE", location.longitude)
+        startActivity(intent)
+    }
+
+    //opens current challenge based on pin
+    private fun startCurrentChallengeActivity(challenge: Challenge) {
+        val intent = Intent(this, CurrentChallengePage::class.java)
+        intent.putExtra("CHALLENGE_TITLE", challenge.title)
+        intent.putExtra("CHALLENGE_DESC", challenge.desc)
+
+        // NEED TO FIGURE OUT PICTURES ---------
+        intent.putExtra("CHALLENGE_PHOTO", challenge.photo?.path)
+        startActivity(intent)
+    }
+
+    //Tracks the users location when they open the map
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
@@ -137,6 +167,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //Asks for user permision when first launched
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -149,6 +180,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    //Incase the user denies
     private fun moveToDefaultLocation() {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f))
         mMap.addMarker(MarkerOptions().position(defaultLocation).title("Default Location"))

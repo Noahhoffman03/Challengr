@@ -11,7 +11,7 @@
 
     <!--
     <Button
-        android:id="@+id/create_challenge"
+        android:id="@+id/currentchal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -23,6 +23,6 @@
         android:layout_marginEnd="123dp"
         android:layout_marginBottom="56dp"
         android:text="Create Challenge" />
+-->
 
-        -->
 </RelativeLayout>
