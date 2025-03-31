@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // 🔹 Force login screen to appear if user isn't authenticated
+
         if (auth.currentUser != null) {
             Log.d("AuthCheck", "User already logged in: ${auth.currentUser?.email}")
             startActivity(Intent(this, MainActivity::class.java))

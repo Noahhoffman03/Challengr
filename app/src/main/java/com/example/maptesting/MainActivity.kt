@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-        val createChallengeButton: Button = findViewById(R.id.testing_button)
+        val createChallengeButton: ImageButton = findViewById(R.id.toChallengrz)
         createChallengeButton.setOnClickListener {
            val intent = Intent(this, ProfileActivity::class.java)
                startActivity(intent)
