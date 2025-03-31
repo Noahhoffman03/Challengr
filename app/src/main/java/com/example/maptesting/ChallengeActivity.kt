@@ -23,12 +23,7 @@ class ChallengeActivity : AppCompatActivity() {
     lateinit var imageView: ImageView
     private lateinit var challenge: Challenge
     private lateinit var user: User
-    /*
-        username = "Test",
-        bio = "test Bio",
-        mainLocation = "St. Peter, MN",
-        password = "TestPassword"
-    )*/
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,48 +98,30 @@ class ChallengeActivity : AppCompatActivity() {
                     println(result)
                 }
 
-                //get code
-                /*
-                user = firestoreClient.getUser(user.username).collect{ result ->
-                    if (result!= null){
-                        printLn("user got")
-                        //id = user.id
-                        //username = user.username
-                        //etc
-                    }
-                    else{
-                        println("no user")
-                    }
-                }
-                */
+
             }
 
-            //var newChal: Challenge
-            //newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+             // goes back to the previous page
 
 
-            //I think there was an issue with how this was setup so I changed it a little
-            //submitButton.setOnClickListener {
-            //  val newChal = Challenge(
-            //    title_text.text.toString(), uriSave, desc_text.text.toString(), latitude, longitude
-            //)
-            //challenges.add(newChal)
-            //}
 
-
+            //Code that gets something from the database
+            /*
+            user = firestoreClient.getUser(user.username).collect{ result ->
+                if (result!= null){
+                    printLn("user got")
+                    //id = user.id
+                    //username = user.username
+                    //etc
+                }
+                else{
+                    println("no user")
+                }
+            }
+            */
         }
-        /*
-fun setTitle(context: Context, title: String) {
-    val prefs = context.getSharedPreferences("myAppPackage", 0)
-    val editor = prefs.edit();
-    editor.putString("Title", title);
-    editor.apply();
-}
-fun getTitle(context: Context): String? {
-    val prefs = context.getSharedPreferences("myAppPackage", 0)
-    return prefs.getString("username", "")
-}*/
-
-
     }
 }

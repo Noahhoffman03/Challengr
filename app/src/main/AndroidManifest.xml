@@ -50,11 +50,13 @@
 
         <activity android:name=".ChallengeActivity"/>
         <activity android:name=".PhotoActivity"/>
+        <activity android:name=".CurrentChallengePage"/>
         <activity android:name=".SignupActivity"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".ChallList"/>
         <activity android:name=".ChallengeView"/>
+
 
         <!--Contains the API key for the map to work. NEEDED, DO NOT MESS WITH -->
         <meta-data
