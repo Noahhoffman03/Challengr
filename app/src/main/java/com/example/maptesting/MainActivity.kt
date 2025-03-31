@@ -76,12 +76,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
            val intent = Intent(this, ProfileActivity::class.java)
                startActivity(intent)
      }
-
-        //Testing log out feature
-//        val logoutButton: Button = findViewById(R.id.testing_button)
-//        logoutButton.setOnClickListener {
-//            logoutUser()
-//        }
     }
 
 
@@ -124,9 +118,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // This loads all the current challenges
     // TO UPDATE
-    //  - get from database
     //  - load completed colors in different color
-    //  - Links to new page
     private fun loadExistingChallenges() {
         for (challenge in challenges) {
             val location = LatLng(challenge.lat, challenge.lng)
