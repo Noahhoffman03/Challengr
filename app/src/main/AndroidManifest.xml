@@ -38,6 +38,8 @@
 
         <activity android:name=".ChallengeActivity"/>
         <activity android:name=".PhotoActivity"/>
+        <activity android:name=".signup_activity"/>
+        <activity android:name=".login_activity"/>
 
         <!--Contains the API key for the map to work. NEEDED, DO NOT MESS WITH -->
         <meta-data
