@@ -1,113 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity">
 
     <TextView
-        android:id="@+id/Title"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="User Login"
+        android:text="Profile"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/username_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="Username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
+        android:layout_marginTop="32dp"
+        android:text="Username:"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        android:textSize="18sp"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-    </com.google.android.material.textfield.TextInputLayout>
-
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:layout_marginStart="32dp"/>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/username_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="196dp"
-        android:text="Password"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="36dp"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintStart_toEndOf="@id/username_label"
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="409dp"
+    <TextView
+        android:id="@+id/location_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/title_input"
-        android:layout_width="274dp"
-        android:layout_height="48dp"
         android:layout_marginTop="16dp"
-        android:hint="username"
+        android:text="Hometown:"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@id/username_label"
+        android:layout_marginStart="32dp"/>
 
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/password_input"
-        android:layout_width="274dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="136dp"
-        android:hint="password"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/login_button"
+    <TextView
+        android:id="@+id/location_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="372dp"
-        android:text="Login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/location_label"
+        app:layout_constraintTop_toBottomOf="@id/username_text" />
 
-    <Button
-        android:id="@+id/signup_button"
+    <TextView
+        android:id="@+id/bio_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Signup"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="16dp"
+        android:text="Bio:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/location_label"
+        android:layout_marginStart="32dp"/>
+
+    <TextView
+        android:id="@+id/bio_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/bio_label"
+        app:layout_constraintTop_toBottomOf="@id/location_text" />
+
+    <TextView
+        android:id="@+id/challenges_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Challenges Completed:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bio_label"
+        android:layout_marginStart="32dp"/>
+
+    <TextView
+        android:id="@+id/challenges_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="196dp"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@id/challenges_label"
+        app:layout_constraintTop_toBottomOf="@id/bio_text" />
+
+    <TextView
+        android:id="@+id/userid_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="User ID:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/challenges_label"
+        android:layout_marginStart="32dp"/>
+
+    <TextView
+        android:id="@+id/userid_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/userid_label"
+        app:layout_constraintTop_toBottomOf="@id/challenges_text" />
+
+    <Button
+        android:id="@+id/testing_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="667dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
-

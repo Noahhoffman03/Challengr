@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -21,6 +23,9 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
+import com.example.maptesting.MainActivity
+import com.example.maptesting.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -39,6 +44,28 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Fragment for map
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+
+
+
+        val createChallengeButton: ImageButton = findViewById(R.id.toChallengrz)
+        createChallengeButton.setOnClickListener {
+           val intent = Intent(this, ProfileActivity::class.java)
+               startActivity(intent)
+     }
+
+        //"
+       // val createChallengeButton: Button = findViewById(R.id.create_challenge)
+     //   createChallengeButton.setOnClickListener {
+      //      val intent = Intent(this, ChallengeActivity::class.java)
+     //            startActivity(intent)
+      //  }
+
+        val toChallList: ImageButton = findViewById(R.id.toChallList)
+        toChallList.setOnClickListener {
+            val intent = Intent(this, ChallList::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -80,8 +107,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
+
     // Loads challenges from database as blue pins
     //Probably an easier way of doing this (Iteration 3)?
+
+    // This loads all the current challenges
+    // TO UPDATE
+    //  - load completed colors in different color
+
     private fun loadExistingChallenges() {
 
         firestore.collection("Challenges") //for the collection
@@ -186,4 +219,5 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f))
         mMap.addMarker(MarkerOptions().position(defaultLocation).title("Default Location"))
     }
+
 }
