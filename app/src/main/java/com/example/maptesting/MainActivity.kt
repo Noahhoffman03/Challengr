@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.yourapp.LoginActivity
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -67,12 +68,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-        //"
-       // val createChallengeButton: Button = findViewById(R.id.create_challenge)
-     //   createChallengeButton.setOnClickListener {
-      //      val intent = Intent(this, ChallengeActivity::class.java)
-     //            startActivity(intent)
-      //  }
+
+        val createChallengeButton: Button = findViewById(R.id.testing_button)
+        createChallengeButton.setOnClickListener {
+           val intent = Intent(this, LoginActivity::class.java)
+               startActivity(intent)
+     }
     }
 
 
