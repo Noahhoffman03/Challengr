@@ -26,6 +26,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.example.maptesting.MainActivity
+import com.example.maptesting.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -69,6 +72,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
+        val createChallengeButton: Button = findViewById(R.id.testing_button)
+        createChallengeButton.setOnClickListener {
+           val intent = Intent(this, ProfileActivity::class.java)
+               startActivity(intent)
+     }
+
         //"
        // val createChallengeButton: Button = findViewById(R.id.create_challenge)
      //   createChallengeButton.setOnClickListener {
@@ -81,6 +90,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this, ChallList::class.java)
             startActivity(intent)
         }
+
     }
 
 
@@ -123,9 +133,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // This loads all the current challenges
     // TO UPDATE
-    //  - get from database
     //  - load completed colors in different color
-    //  - Links to new page
     private fun loadExistingChallenges() {
         for (challenge in challenges) {
             val location = LatLng(challenge.lat, challenge.lng)
@@ -205,4 +213,5 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f))
         mMap.addMarker(MarkerOptions().position(defaultLocation).title("Default Location"))
     }
+
 }
