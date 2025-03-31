@@ -13,6 +13,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -76,6 +77,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
            val intent = Intent(this, ProfileActivity::class.java)
                startActivity(intent)
      }
+
+        //"
+       // val createChallengeButton: Button = findViewById(R.id.create_challenge)
+     //   createChallengeButton.setOnClickListener {
+      //      val intent = Intent(this, ChallengeActivity::class.java)
+     //            startActivity(intent)
+      //  }
+
+        val toChallList: ImageButton = findViewById(R.id.toChallList)
+        toChallList.setOnClickListener {
+            val intent = Intent(this, ChallList::class.java)
+            startActivity(intent)
+        }
+
     }
 
 
