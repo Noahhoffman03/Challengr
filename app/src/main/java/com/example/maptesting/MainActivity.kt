@@ -25,7 +25,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.yourapp.LoginActivity
+import com.example.maptesting.MainActivity
+import com.example.maptesting.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -69,11 +71,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-        val createChallengeButton: Button = findViewById(R.id.testing_button)
-        createChallengeButton.setOnClickListener {
-           val intent = Intent(this, LoginActivity::class.java)
-               startActivity(intent)
-     }
+//        val createChallengeButton: Button = findViewById(R.id.testing_button)
+//        createChallengeButton.setOnClickListener {
+//           val intent = Intent(this, LoginActivity::class.java)
+//               startActivity(intent)
+//     }
+
+        val logoutButton: Button = findViewById(R.id.testing_button)
+        logoutButton.setOnClickListener {
+            logoutUser()
+        }
     }
 
 
@@ -197,5 +204,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun moveToDefaultLocation() {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f))
         mMap.addMarker(MarkerOptions().position(defaultLocation).title("Default Location"))
+    }
+
+    private fun logoutUser() {
+        FirebaseAuth.getInstance().signOut() // Logs out the user
+
+        // Redirect to LoginActivity and clear backstack
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }

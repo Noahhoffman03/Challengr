@@ -1,4 +1,4 @@
-package com.yourapp
+package com.example.maptesting
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,11 +12,7 @@ import com.example.maptesting.R
 import com.example.maptesting.SignupActivity
 import com.google.firebase.auth.FirebaseAuth
 
-//I found 2 sites with login and signup code and
-//there are videos about it too.
-//Uses Firebase Authenticate cause it automatically deals with most of the login
-//stuff its pretty nice
-public class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var emailEditText: EditText
@@ -26,28 +22,37 @@ public class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_page)
 
         auth = FirebaseAuth.getInstance()
 
-        emailEditText = findViewById(R.id.emailEditText)
-        passwordEditText = findViewById(R.id.passwordEditText)
-        loginButton = findViewById(R.id.login_button)
-        signUpRedirectButton = findViewById(R.id.signupRedirect_button)
+        // 🔹 Force login screen to appear if user isn't authenticated
+        if (auth.currentUser != null) {
+            Log.d("AuthCheck", "User already logged in: ${auth.currentUser?.email}")
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        } else {
+            Log.d("AuthCheck", "No user logged in, showing login screen")
+            setContentView(R.layout.login_page)
 
-        loginButton.setOnClickListener {
-            val email = emailEditText.text.toString().trim()
-            val password = passwordEditText.text.toString().trim()
+            emailEditText = findViewById(R.id.emailEditText)
+            passwordEditText = findViewById(R.id.passwordEditText)
+            loginButton = findViewById(R.id.login_button)
+            signUpRedirectButton = findViewById(R.id.signupRedirect_button)
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                loginUser(email, password)
-            } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            loginButton.setOnClickListener {
+                val email = emailEditText.text.toString().trim()
+                val password = passwordEditText.text.toString().trim()
+
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    loginUser(email, password)
+                } else {
+                    Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
 
-        signUpRedirectButton.setOnClickListener {
-            startActivity(Intent(this, SignupActivity::class.java))
+            signUpRedirectButton.setOnClickListener {
+                startActivity(Intent(this, SignupActivity::class.java))
+            }
         }
     }
 
@@ -56,7 +61,7 @@ public class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java)) // Navigate to home page
+                    startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
                     Toast.makeText(this, "Login failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()

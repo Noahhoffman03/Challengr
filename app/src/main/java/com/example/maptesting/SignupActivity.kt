@@ -8,7 +8,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.yourapp.LoginActivity
+import com.example.maptesting.LoginActivity
+
+
+//This was all online too, mostly pretty standard stuff
 
 class SignupActivity : AppCompatActivity() {
 
@@ -77,7 +80,7 @@ class SignupActivity : AppCompatActivity() {
             completedChallenge = mutableListOf()
         )
 
-        db.collection("users").document(userId).set(user)
+        db.collection("Users").document(userId).set(user)
             .addOnSuccessListener {
                 Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, LoginActivity::class.java))
