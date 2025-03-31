@@ -52,6 +52,7 @@
         <activity android:name=".PhotoActivity"/>
         <activity android:name=".SignupActivity"/>
         <activity android:name=".MainActivity"/>
+        <activity android:name=".ProfileActivity"/>
 
         <!--Contains the API key for the map to work. NEEDED, DO NOT MESS WITH -->
         <meta-data

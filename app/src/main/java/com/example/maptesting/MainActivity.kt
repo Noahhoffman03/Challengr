@@ -71,16 +71,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-//        val createChallengeButton: Button = findViewById(R.id.testing_button)
-//        createChallengeButton.setOnClickListener {
-//           val intent = Intent(this, LoginActivity::class.java)
-//               startActivity(intent)
-//     }
+        val createChallengeButton: Button = findViewById(R.id.testing_button)
+        createChallengeButton.setOnClickListener {
+           val intent = Intent(this, ProfileActivity::class.java)
+               startActivity(intent)
+     }
 
-        val logoutButton: Button = findViewById(R.id.testing_button)
-        logoutButton.setOnClickListener {
-            logoutUser()
-        }
+        //Testing log out feature
+//        val logoutButton: Button = findViewById(R.id.testing_button)
+//        logoutButton.setOnClickListener {
+//            logoutUser()
+//        }
     }
 
 
@@ -206,13 +207,4 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(defaultLocation).title("Default Location"))
     }
 
-    private fun logoutUser() {
-        FirebaseAuth.getInstance().signOut() // Logs out the user
-
-        // Redirect to LoginActivity and clear backstack
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
-    }
 }
