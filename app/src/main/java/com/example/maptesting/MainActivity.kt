@@ -180,6 +180,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+
     //Incase the user denies
     private fun moveToDefaultLocation() {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 12f))
