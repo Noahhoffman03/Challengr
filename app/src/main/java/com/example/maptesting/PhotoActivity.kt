@@ -25,9 +25,11 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
+import com.google.android.gms.maps.model.LatLng
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -69,7 +71,19 @@ class PhotoActivity : AppCompatActivity() {
         handlerThread.start()
         handler = Handler((handlerThread).looper)
 
-        imageReader = ImageReader.newInstance(1080, 1980, ImageFormat.JPEG, 1)
+        //set take picture button to take the picture
+        findViewById<Button>(R.id.btn_take_picture).apply {
+            setOnClickListener {
+                //create capture request on current camera device
+                capReq = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+                //add the imagereader surface as a target
+                capReq.addTarget(imageReader.surface)
+                //capture the image
+                cameraCaptureSession.capture(capReq.build(), null, null)
+            }
+        }
+
+        imageReader = ImageReader.newInstance(1080, 1920, ImageFormat.JPEG, 1)
 
         //when the image is available to be read
         imageReader.setOnImageAvailableListener(object : ImageReader.OnImageAvailableListener {
@@ -82,26 +96,31 @@ class PhotoActivity : AppCompatActivity() {
                 val bytes = ByteArray(buffer.remaining())
                 buffer.get(bytes)
                 //date format for saving files
-                val format = SimpleDateFormat("dd/M/yyyy hh:mm:ss", Locale("en", "US"))
+                //val format = SimpleDateFormat("dd/M/yyyy hh:mm:ss", Locale("en", "US"))
                 //get the current date in desired format
-                val currentDate = format.format(Date())
+                //val currentDate = format.format(Date())
                 //turn it into a file
-                val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "$currentDate-img.jpeg")
+                val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "img.jpeg")
                 //create output stream
-                val opStream = FileOutputStream(file)
-                uri_save = file.toUri()
+                //val opStream = FileOutputStream(file)
+                val uri = file.toUri()
                 //write the output
-                opStream.write(bytes)
+                //opStream.write(bytes)
 
-                opStream.close()
+                //opStream.close()
 
                 image.close()
+
+
+                startChallengeActivity(uri)
+                //send bytearray to challenge activity
                 //Toast.makeText(this@PhotoActivity, "Image Captured", Toast.LENGTH_SHORT).show()
             }
         }, handler)
         //initiate texture view as a listener
         textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
             //when texture view surface is available
+            @RequiresPermission(Manifest.permission.CAMERA)
             override fun onSurfaceTextureAvailable(p0: SurfaceTexture, p1: Int, p2: Int) {
                 //open the camera
                 openCamera()
@@ -119,28 +138,18 @@ class PhotoActivity : AppCompatActivity() {
 
 
         }
-        //set take picture button to take the picture
-        findViewById<Button>(R.id.btn_take_picture).apply {
-            setOnClickListener {
-                //create capture request on current camera device
-                capReq = cameraDevice.createCaptureRequest((CameraDevice.TEMPLATE_STILL_CAPTURE))
-                //add the imagereader surface as a target
-                capReq.addTarget(imageReader.surface)
-                //capture the image
-                cameraCaptureSession.capture(capReq.build(), null, handler)
-            }
-        }
+
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraDevice.close()
+        handler.removeCallbacksAndMessages(null)
+        handlerThread.quitSafely()
     }
     //fun to open camera
+    @RequiresPermission(Manifest.permission.CAMERA)
     private fun openCamera() {
         //check permissions
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            getPermissions()
-        }
         //use camera manager to open camera
         cameraManager.openCamera(cameraManager.cameraIdList[0], object: CameraDevice.StateCallback(){
             override fun onOpened(p0: CameraDevice) {
@@ -150,7 +159,7 @@ class PhotoActivity : AppCompatActivity() {
                 var surface = Surface(textureView.surfaceTexture)
                 capReq.addTarget(surface)
 
-                cameraDevice.createCaptureSession(listOf(surface,imageReader.surface), object:
+                cameraDevice.createCaptureSession(listOf(surface, imageReader.surface), object:
                     CameraCaptureSession.StateCallback() {
                     override fun onConfigured(p0: CameraCaptureSession) {
                         cameraCaptureSession = p0
@@ -173,13 +182,6 @@ class PhotoActivity : AppCompatActivity() {
 
             }
         }, handler)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraDevice.close()
-        handler.removeCallbacksAndMessages(null)
-        handlerThread.quitSafely()
     }
     fun getPermissions(){
         var permissionsList = mutableListOf<String>()
@@ -204,6 +206,9 @@ class PhotoActivity : AppCompatActivity() {
             }
         }
     }
-
-
+    private fun startChallengeActivity(uri: Uri) {
+        val intent = Intent(this, ChallengeActivity::class.java)
+        intent.putExtra("Photo", uri)
+        startActivity(intent)
+    }
 }

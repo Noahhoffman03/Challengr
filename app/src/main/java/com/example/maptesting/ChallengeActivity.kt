@@ -45,7 +45,7 @@ class ChallengeActivity : AppCompatActivity() {
 
         //get pic uri from intent
 
-        val picTakenFile = intent.getStringExtra("uri_save")?.toUri()?.toFile()
+        val picTakenUri = intent.getStringExtra("Photo")?.toUri()
 
         //// ------- Extra stuff if we wanna display the coordinates
         // val locationTextView: TextView = findViewById(R.id.location_info)
@@ -78,6 +78,7 @@ class ChallengeActivity : AppCompatActivity() {
                 if (uri != null) {
                     Log.d("PhotoPicker", "Selected URI: $uri")
                     imageView.setImageURI(uri)
+                    uri.toFile().readBytes()
                     uriSave = uri
 
                 } else {
@@ -95,7 +96,7 @@ class ChallengeActivity : AppCompatActivity() {
                 creatorId = user.id,
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
-                photo = picTakenFile,
+                photo = picTakenUri?.toFile(),
                 lat = latitude,
                 lng = longitude
             )
