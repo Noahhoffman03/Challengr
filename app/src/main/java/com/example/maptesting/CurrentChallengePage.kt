@@ -47,22 +47,21 @@ class CurrentChallengePage : AppCompatActivity(), GestureDetector.OnGestureListe
 
     }
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event != null) {
-            return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+        return if (event != null) {
+            gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+        } else {
+            super.onTouchEvent(event)
         }
-        return super.onTouchEvent(event)
     }
+
     override fun onDown(e: MotionEvent): Boolean {
-        TODO("Not yet implemented")
         return false
     }
 
     override fun onShowPress(e: MotionEvent) {
-        TODO("Not yet implemented")
     }
 
     override fun onSingleTapUp(e: MotionEvent): Boolean {
-        TODO("Not yet implemented")
         return false
     }
 
@@ -72,30 +71,29 @@ class CurrentChallengePage : AppCompatActivity(), GestureDetector.OnGestureListe
         distanceX: Float,
         distanceY: Float
     ): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
     override fun onLongPress(e: MotionEvent) {
-        TODO("Not yet implemented")
     }
 
     override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
         if (e1 == null) return false
         val diffX = e2.x - e1.x
         val diffY = e2.y - e1.y
-        if (abs(diffX) > abs(diffY) && abs(diffX) > MIN_DISTANCE && abs(velocityX) > 100) {
-            if (diffX < 0) {
-                Log.d("Gesture", "Left Swipe Detected, launching ChallengeActivity")
+        if (abs(diffX) > abs(diffY)) {
+            if (diffX < -MIN_DISTANCE) {
+                Log.d("Gesture", "Swipe Left → ChallList")
                 val intent = Intent(this, ChallList::class.java)
                 startActivity(intent)
-                finish()
-            } else {
+                return true
+            } else if (diffX > MIN_DISTANCE) {
+                Log.d("Gesture", "Swipe Right → MainActivity")
                 val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
                 finish()
-                Log.d("Gesture", "Right Swipe Detected")
+                return true
             }
-            return true
         }
         return false
 
