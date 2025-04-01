@@ -45,6 +45,7 @@ class ChallengeActivity : AppCompatActivity() {
         password = "TestPassword"
     )*/
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge)
@@ -121,7 +122,7 @@ class ChallengeActivity : AppCompatActivity() {
                 creatorId = user.id,
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
-                photo = uriSave.toFile(),
+                photo = null,
                 lat = latitude,
                 lng = longitude
             )
@@ -135,49 +136,31 @@ class ChallengeActivity : AppCompatActivity() {
                     println(result)
                 }
 
-                //get code
-                /*
-                user = firestoreClient.getUser(user.username).collect{ result ->
-                    if (result!= null){
-                        printLn("user got")
-                        //id = user.id
-                        //username = user.username
-                        //etc
-                    }
-                    else{
-                        println("no user")
-                    }
-                }
-                */
+
             }
 
-            //var newChal: Challenge
-            //newChal = Challenge(title_text.text.toString(), uriSave, desc_text.text.toString())
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+             // goes back to the previous page
 
 
-            //I think there was an issue with how this was setup so I changed it a little
-            //submitButton.setOnClickListener {
-            //  val newChal = Challenge(
-            //    title_text.text.toString(), uriSave, desc_text.text.toString(), latitude, longitude
-            //)
-            //challenges.add(newChal)
-            //}
 
-
+            //Code that gets something from the database
+            /*
+            user = firestoreClient.getUser(user.username).collect{ result ->
+                if (result!= null){
+                    printLn("user got")
+                    //id = user.id
+                    //username = user.username
+                    //etc
+                }
+                else{
+                    println("no user")
+                }
+            }
+            */
         }
-        /*
-fun setTitle(context: Context, title: String) {
-    val prefs = context.getSharedPreferences("myAppPackage", 0)
-    val editor = prefs.edit();
-    editor.putString("Title", title);
-    editor.apply();
-}
-fun getTitle(context: Context): String? {
-    val prefs = context.getSharedPreferences("myAppPackage", 0)
-    return prefs.getString("username", "")
-}*/
-
-
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
