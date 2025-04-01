@@ -48,7 +48,7 @@ class PhotoActivity : AppCompatActivity() {
     lateinit var cameraDevice: CameraDevice
     lateinit var captureRequest: CaptureRequest
     lateinit var imageReader: ImageReader
-    lateinit var uri_save: Uri
+    //lateinit var uri_save: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,23 +97,23 @@ class PhotoActivity : AppCompatActivity() {
                 val bytes = ByteArray(buffer.remaining())
                 buffer.get(bytes)
                 //date format for saving files
-                //val format = SimpleDateFormat("dd/M/yyyy hh:mm:ss", Locale("en", "US"))
+                val format = SimpleDateFormat("dd/M/yyyy hh:mm:ss", Locale("en", "US"))
                 //get the current date in desired format
-                //val currentDate = format.format(Date())
+                val currentDate = format.format(Date())
                 //turn it into a file
-                val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "img.jpeg")
+                val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "$currentDate-img.jpeg")
                 //create output stream
-                //val opStream = FileOutputStream(file)
-                val uri = file.toUri()
+                val opStream = FileOutputStream(file)
+                //val uri = file.toUri()
                 //write the output
-                //opStream.write(bytes)
+                opStream.write(bytes)
 
-                //opStream.close()
+                opStream.close()
 
                 image.close()
 
 
-                startChallengeActivity(uri)
+                startChallengeActivity(file)
                 //send bytearray to challenge activity
                 //Toast.makeText(this@PhotoActivity, "Image Captured", Toast.LENGTH_SHORT).show()
             }
@@ -207,9 +207,9 @@ class PhotoActivity : AppCompatActivity() {
             }
         }
     }
-    private fun startChallengeActivity(uri: Uri) {
+    private fun startChallengeActivity(file: File) {
         val intent = Intent(this, ChallengeActivity::class.java)
-        intent.putExtra("Photo", uri.toString())
+        intent.putExtra("Photo", file.toUri().toString())
         startActivity(intent)
     }
 }

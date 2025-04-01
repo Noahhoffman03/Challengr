@@ -45,10 +45,14 @@ class ChallengeActivity : AppCompatActivity() {
         val longitude = intent.getDoubleExtra("LONGITUDE", 0.0)
 
         //get pic uri from intent
-        val uriSaveNullable = intent.getStringExtra("photo")?.toUri()
-        if (uriSaveNullable != null) {
-            uriSave = uriSaveNullable
+
+        //this doesnt do anything
+        uriSave = R.drawable.back_arrow.toString().toUri()
+        //this should work
+        if(intent.getStringExtra("Photo") != null){
+            uriSave = intent.getStringExtra("Photo")!!.toUri()
         }
+
         //// ------- Extra stuff if we wanna display the coordinates
         // val locationTextView: TextView = findViewById(R.id.location_info)
         // locationTextView.text = "Challenge Location:\nLatitude: $latitude \nLongitude: $longitude"
