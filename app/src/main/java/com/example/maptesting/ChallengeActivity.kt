@@ -24,6 +24,7 @@ class ChallengeActivity : AppCompatActivity() {
     lateinit var imageView: ImageView
     private lateinit var challenge: Challenge
     private lateinit var user: User
+    private lateinit var uriSave: Uri
     /*
         username = "Test",
         bio = "test Bio",
@@ -44,9 +45,10 @@ class ChallengeActivity : AppCompatActivity() {
         val longitude = intent.getDoubleExtra("LONGITUDE", 0.0)
 
         //get pic uri from intent
-
-        val picTakenUri = intent.getStringExtra("Photo")?.toUri()
-
+        val uriSaveNullable = intent.getStringExtra("photo")?.toUri()
+        if (uriSaveNullable != null) {
+            uriSave = uriSaveNullable
+        }
         //// ------- Extra stuff if we wanna display the coordinates
         // val locationTextView: TextView = findViewById(R.id.location_info)
         // locationTextView.text = "Challenge Location:\nLatitude: $latitude \nLongitude: $longitude"
@@ -59,7 +61,7 @@ class ChallengeActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
+    
 
         val photoView = findViewById<Button>(R.id.picture_view)
         photoView.setOnClickListener {
@@ -70,7 +72,7 @@ class ChallengeActivity : AppCompatActivity() {
 
         imageView = findViewById(R.id.pic_display)
         val pick_photo = findViewById<Button>(R.id.btn_take_picture)
-        var uriSave: Uri? = null
+        imageView.setImageURI(uriSave)
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 // Callback is invoked after the user selects a media item or closes the
@@ -96,7 +98,7 @@ class ChallengeActivity : AppCompatActivity() {
                 creatorId = user.id,
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
-                photo = picTakenUri?.toFile(),
+                photo = uriSave?.toFile(),
                 lat = latitude,
                 lng = longitude
             )

@@ -48,7 +48,7 @@ class PhotoActivity : AppCompatActivity() {
     lateinit var cameraDevice: CameraDevice
     lateinit var captureRequest: CaptureRequest
     lateinit var imageReader: ImageReader
-    var uri_save: Uri? = null
+    lateinit var uri_save: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,9 +58,9 @@ class PhotoActivity : AppCompatActivity() {
         backButton.setOnClickListener {
             val intent = Intent(this, ChallengeActivity::class.java)
             startActivity(intent)
-            if(uri_save != null) { //if the uri save exists, bring it with back to the challenge page
-                intent.putExtra("uri_save", uri_save.toString())
-            }
+            //if(uri_save != null) { //if the uri save exists, bring it with back to the challenge page
+             //   intent.putExtra("uri_save", uri_save.toString())
+            //}
             finish()
         }
         getPermissions()
@@ -80,6 +80,7 @@ class PhotoActivity : AppCompatActivity() {
                 capReq.addTarget(imageReader.surface)
                 //capture the image
                 cameraCaptureSession.capture(capReq.build(), null, null)
+
             }
         }
 
@@ -208,7 +209,7 @@ class PhotoActivity : AppCompatActivity() {
     }
     private fun startChallengeActivity(uri: Uri) {
         val intent = Intent(this, ChallengeActivity::class.java)
-        intent.putExtra("Photo", uri)
+        intent.putExtra("Photo", uri.toString())
         startActivity(intent)
     }
 }
