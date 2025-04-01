@@ -29,7 +29,6 @@ class Adapter(private val list: List<Item>) : RecyclerView.Adapter<Adapter.ViewH
 
         // sets the text to the textview from our itemHolder class
         holder.textView.text = item.text
-
     }
 
     // return the number of the items in the list
@@ -41,5 +40,6 @@ class Adapter(private val list: List<Item>) : RecyclerView.Adapter<Adapter.ViewH
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = itemView.findViewById(R.id.imageview)
         val textView: TextView = itemView.findViewById(R.id.textView)
+
     }
 }
