@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.widget.Toast
 import android.widget.Button
 import android.widget.ImageButton
@@ -26,6 +28,7 @@ import java.io.File
 import com.example.maptesting.MainActivity
 import com.example.maptesting.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
+import kotlin.math.abs
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -37,7 +40,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -220,4 +222,4 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(defaultLocation).title("Default Location"))
     }
 
-}
+    }
