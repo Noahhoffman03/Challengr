@@ -40,6 +40,15 @@
             app:layout_constraintStart_toEndOf="@+id/imageview"
             app:layout_constraintTop_toTopOf="@+id/imageview" />
 
+        <ImageButton
+            android:id="@+id/toChall"
+            android:layout_width="42dp"
+            android:layout_height="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_media_ff" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
