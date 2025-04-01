@@ -3,28 +3,32 @@ package com.example.maptesting
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.math.abs
+import android.view.GestureDetector
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     private lateinit var usernameText: TextView
     private lateinit var locationText: TextView
     private lateinit var bioText: TextView
     private lateinit var challengesText: TextView
     private lateinit var userIdText: TextView
-
+    lateinit var gestureDetector: GestureDetector
+    var MIN_DISTANCE = 150
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.profile_page)
-
+        gestureDetector = GestureDetector(this, this)
         usernameText = findViewById(R.id.username_text)
         locationText = findViewById(R.id.location_text)
         bioText = findViewById(R.id.bio_text)
@@ -80,4 +84,54 @@ class ProfileActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return if (event != null) {
+            gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+        } else {
+            super.onTouchEvent(event)
+        }
+    }
+
+    override fun onDown(e: MotionEvent): Boolean {
+        return false
+    }
+
+    override fun onShowPress(e: MotionEvent) {
+    }
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        return false
+    }
+
+    override fun onScroll(
+        e1: MotionEvent?,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
+        return false
+    }
+    override fun onLongPress(e: MotionEvent) {
+    }
+
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        if (e1 == null) return false
+        val diffX = e2.x - e1.x
+        val diffY = e2.y - e1.y
+        if (abs(diffX) > abs(diffY)) {
+            if (diffX < -MIN_DISTANCE) {
+                Log.d("Gesture", "Swipe Left → MainActivity")
+                val intent = Intent(this,  MainActivity::class.java)
+                startActivity(intent)
+                return true
+            } else if (diffX > MIN_DISTANCE) {
+                Log.d("Gesture", "Swipe Right → Null")
+                // Swipe right goes nowhere
+                return true
+            }
+        }
+        return false
+
+    }
+
 }
