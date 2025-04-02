@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class Adapter(private val context: Context, private val list: List<Item>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+class Adapter(private val context: Context, private val list: List<Item>, private val onChallengeClick: (Item) -> Unit) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,9 +34,7 @@ class Adapter(private val context: Context, private val list: List<Item>) : Recy
         holder.textView.text = item.text
 
         holder.toChall.setOnClickListener {
-            val intent = Intent(context, CurrentChallengePage::class.java) // Replace with your target activity
-            intent.putExtra("itemText", item.text) // Pass any necessary data
-            context.startActivity(intent)
+            onChallengeClick(item) // Pass the clicked challenge
         }
     }
 

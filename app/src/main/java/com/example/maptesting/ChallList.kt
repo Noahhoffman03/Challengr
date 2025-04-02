@@ -1,6 +1,5 @@
 package com.example.maptesting
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
@@ -59,19 +58,26 @@ class ChallList : AppCompatActivity() {
             .addOnSuccessListener { documents ->
                 for (document in documents) {
                     val title = document.getString("title") ?: "No Title"
-                    data.add(Item(R.drawable.tiger, title))
+                    val desc = document.getString("desc") ?: "No Description"
+                    data.add(Item(R.drawable.tiger, title, desc))
                     i += 1
                 }
 
                 // This will pass the ArrayList to our Adapter
                 //val adapter = Adapter(data)
-                val itemList = listOf(
-                    Item(R.drawable.tiger, "Challenge 1")
-                )
 
                 // Setting the Adapter with the recyclerview
-                val adapter = Adapter(this, itemList)
+                val adapter = Adapter(this, data) { challenge ->
+                    startCurrentChallengeActivity(challenge)
+                }
                 recyclerview.adapter = adapter
             }
+
+    }
+    private fun startCurrentChallengeActivity(challenge: Item) {
+        val intent = Intent(this, CurrentChallengePage::class.java)
+        intent.putExtra("CHALLENGE_TITLE", challenge.text)
+        intent.putExtra("CHALLENGE_DESC", challenge.desc)
+        startActivity(intent)
     }
 }
