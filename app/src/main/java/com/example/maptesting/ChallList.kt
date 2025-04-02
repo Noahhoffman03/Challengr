@@ -35,12 +35,12 @@ class ChallList : AppCompatActivity() {
             finish()
         }
 
-        val toChall = findViewById<ImageButton>(R.id.toChall)
+        /*val toChall = findViewById<ImageButton>(R.id.toChall)
         toChall.setOnClickListener {
             val intent = Intent(this, CurrentChallengePage::class.java)
             startActivity(intent)
             finish()
-        }
+        }*/
 
         // getting the recyclerview by its id
         val recyclerview: RecyclerView = findViewById(R.id.recyclerview)
