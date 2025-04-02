@@ -64,9 +64,13 @@ class ChallList : AppCompatActivity() {
                 }
 
                 // This will pass the ArrayList to our Adapter
-                val adapter = Adapter(data)
+                //val adapter = Adapter(data)
+                val itemList = listOf(
+                    Item(R.drawable.tiger, "Challenge 1")
+                )
 
                 // Setting the Adapter with the recyclerview
+                val adapter = Adapter(this, itemList)
                 recyclerview.adapter = adapter
             }
     }
