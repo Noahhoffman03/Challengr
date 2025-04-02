@@ -16,7 +16,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var locationText: TextView
     private lateinit var bioText: TextView
     private lateinit var challengesText: TextView
-    private lateinit var userIdText: TextView
+    private lateinit var profileTitle: TextView
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -24,17 +24,17 @@ class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.profile_page)
-
-        usernameText = findViewById(R.id.username_text)
+        supportActionBar?.title = "Profile"
+        profileTitle = findViewById(R.id.profile_title)
+        usernameText = findViewById(R.id.profile_title)
         locationText = findViewById(R.id.location_text)
         bioText = findViewById(R.id.bio_text)
         challengesText = findViewById(R.id.challenges_text)
-        userIdText = findViewById(R.id.userid_text)
 
         loadUserData()
 
         //Testing log out feature
-        val logoutButton: Button = findViewById(R.id.testing_button)
+        val logoutButton: Button = findViewById(R.id.logout_button)
         logoutButton.setOnClickListener {
             logoutUser()
         }
@@ -57,10 +57,11 @@ class ProfileActivity : AppCompatActivity() {
                     val completedChallenges = document.get("completedChallenge") as? List<*> ?: emptyList<Any>()
 
                     usernameText.text = username
+                    supportActionBar?.title = username
+                    profileTitle.text = username
                     locationText.text = mainLocation
                     bioText.text = bio
                     challengesText.text = completedChallenges.size.toString() // Display number of challenges
-                    userIdText.text = userId
                 } else {
                     Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show()
                 }
