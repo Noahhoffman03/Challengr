@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-
+        //button for profile page
         val createChallengeButton: ImageButton = findViewById(R.id.toChallengrz)
         createChallengeButton.setOnClickListener {
            val intent = Intent(this, ProfileActivity::class.java)
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     val photoFile = photoPath?.let { File(it) }
 
                     // Create Challenge object
-                    val challenge = Challenge(id, creatorId, title, desc, photoFile, lat, lng)
+                    val challenge = Challenge(id, creatorId, title, desc, photoPath, lat, lng)
 
 
                     // Places challenge pin on the map
@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         intent.putExtra("CHALLENGE_DESC", challenge.desc)
 
         // NEED TO FIGURE OUT PICTURES ---------
-        intent.putExtra("CHALLENGE_PHOTO", challenge.photo?.path)
+        //intent.putExtra("CHALLENGE_PHOTO", challenge.photo?.path)
         startActivity(intent)
     }
 
