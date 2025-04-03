@@ -18,6 +18,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
@@ -34,8 +35,11 @@ class ChallengeCreateActivity : AppCompatActivity() {
     lateinit var imageView: ImageView
     private lateinit var challenge: Challenge
     private lateinit var user: User
-    private lateinit var uriSave: Uri
+    private lateinit var imageUrl: String
+    private lateinit var imageFile: File
     val REQUEST_IMAGE_CAPTURE = 100
+    val URL_PATH = "gs://challengr-1be1f.firebasestorage.app/challenges/"
+    //private lateinit var imageAccessCode
     lateinit var currentPhotoPath: String
 
 
@@ -69,7 +73,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
         photoView.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             //dispatchTakePictureIntent()
-            //val imageFile = createImageFile()
+            imageFile = createImageFile()
             try {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             } catch (e: ActivityNotFoundException) {
@@ -88,7 +92,9 @@ class ChallengeCreateActivity : AppCompatActivity() {
                 if (uri != null) {
                     Log.d("PhotoPicker", "Selected URI: $uri")
                     imageView.setImageURI(uri)
-                    uriSave = uri
+                    //imageFile = uri.toFile()
+                    imageUrl = URL_PATH+uri.toString()+".png"//+ imageAccessCode //also find a way to get a file|path from this
+                    //does just adding.png work? maybe
 
                 } else {
                     Log.d("PhotoPicker", "No media selected")
@@ -104,7 +110,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
             challenge = Challenge(
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
-                photo = uriSave.toString(),
+                photo = imageUrl,
                 lat = latitude,
                 lng = longitude
             )
@@ -146,9 +152,11 @@ class ChallengeCreateActivity : AppCompatActivity() {
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 val imageBitmap = data?.extras?.get("data") as Bitmap
-                var imageFile = bitmapToFile(null, imageBitmap, "hi.png")
+                val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                val fileName =  "${timeStamp}-userImage.png"
+                imageFile = bitmapToFile(null, imageBitmap, fileName)!!
                 imageView.setImageBitmap(imageBitmap)
-                uriSave = imageFile!!.toUri()
+                imageUrl = URL_PATH + fileName// + imageAccessCode
                 //if (imageUri != null) {
                 //  uriSave = imageUri
                 //}
