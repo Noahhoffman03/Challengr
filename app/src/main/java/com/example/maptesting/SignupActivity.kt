@@ -2,6 +2,7 @@ package com.example.maptesting
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -9,19 +10,23 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.maptesting.LoginActivity
+import android.view.GestureDetector
+import android.view.MotionEvent
+import kotlin.math.abs
 
 
 //This was all online too, mostly pretty standard stuff
 
-class SignupActivity : AppCompatActivity() {
-
+class SignupActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
+    lateinit var gestureDetector: GestureDetector
+    var MIN_DISTANCE = 150
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.signup_page)
-
+        gestureDetector = GestureDetector(this, this)
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
@@ -90,4 +95,55 @@ class SignupActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error saving user: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return if (event != null) {
+            gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+        } else {
+            super.onTouchEvent(event)
+        }
+    }
+
+    override fun onDown(e: MotionEvent): Boolean {
+        return false
+    }
+
+    override fun onShowPress(e: MotionEvent) {
+    }
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        return false
+    }
+
+    override fun onScroll(
+        e1: MotionEvent?,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
+        return false
+    }
+    override fun onLongPress(e: MotionEvent) {
+    }
+
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        if (e1 == null) return false
+        val diffX = e2.x - e1.x
+        val diffY = e2.y - e1.y
+        if (abs(diffX) > abs(diffY)) {
+            if (diffX < -MIN_DISTANCE) {
+                Log.d("Gesture", "Swipe Left → Null")
+                return true
+            } else if (diffX > MIN_DISTANCE) {
+                Log.d("Gesture", "Swipe Right → Login")
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+                finish()
+                return true
+            }
+        }
+        return false
+
+    }
+
 }

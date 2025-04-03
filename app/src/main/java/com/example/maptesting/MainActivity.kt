@@ -50,16 +50,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val createChallengeButton: ImageButton = findViewById(R.id.toChallengrz)
         createChallengeButton.setOnClickListener {
-           val intent = Intent(this, ProfileActivity::class.java)
-               startActivity(intent)
-     }
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
 
         //"
-       // val createChallengeButton: Button = findViewById(R.id.create_challenge)
-     //   createChallengeButton.setOnClickListener {
-      //      val intent = Intent(this, ChallengeActivity::class.java)
-     //            startActivity(intent)
-      //  }
+        // val createChallengeButton: Button = findViewById(R.id.create_challenge)
+        //   createChallengeButton.setOnClickListener {
+        //      val intent = Intent(this, ChallengeActivity::class.java)
+        //            startActivity(intent)
+        //  }
 
         val toChallList: ImageButton = findViewById(R.id.toChallList)
         toChallList.setOnClickListener {
