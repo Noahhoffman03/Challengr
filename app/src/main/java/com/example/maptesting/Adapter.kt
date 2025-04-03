@@ -1,13 +1,16 @@
 package com.example.maptesting
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class Adapter(private val list: List<Item>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+class Adapter(private val context: Context, private val list: List<Item>, private val onChallengeClick: (Item) -> Unit) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,6 +33,9 @@ class Adapter(private val list: List<Item>) : RecyclerView.Adapter<Adapter.ViewH
         // sets the text to the textview from our itemHolder class
         holder.textView.text = item.text
 
+        holder.toChall.setOnClickListener {
+            onChallengeClick(item) // Pass the clicked challenge
+        }
     }
 
     // return the number of the items in the list
@@ -41,5 +47,6 @@ class Adapter(private val list: List<Item>) : RecyclerView.Adapter<Adapter.ViewH
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = itemView.findViewById(R.id.imageview)
         val textView: TextView = itemView.findViewById(R.id.textView)
+        val toChall: ImageButton = itemView.findViewById(R.id.toChall)
     }
 }
