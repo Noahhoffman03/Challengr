@@ -59,7 +59,7 @@ class ChallengeActivity : AppCompatActivity() {
         // Back button
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -120,7 +120,7 @@ class ChallengeActivity : AppCompatActivity() {
 
             }
 
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
             finish()
             // goes back to the previous page

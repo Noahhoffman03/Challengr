@@ -126,7 +126,7 @@ class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         if (abs(diffX) > abs(diffY)) {
             if (diffX < -MIN_DISTANCE) {
                 Log.d("Gesture", "Swipe Left → MainActivity")
-                val intent = Intent(this,  MainActivity::class.java)
+                val intent = Intent(this,  MapActivity::class.java)
                 startActivity(intent)
                 return true
             } else if (diffX > MIN_DISTANCE) {

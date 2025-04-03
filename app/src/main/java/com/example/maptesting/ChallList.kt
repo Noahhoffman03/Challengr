@@ -27,7 +27,7 @@ class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
         gestureDetector = GestureDetector(this, this)
         val toChallView = findViewById<ImageButton>(R.id.back_button)
         toChallView.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -130,7 +130,7 @@ class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
                 return true
             } else if (diffX > MIN_DISTANCE) {
                 Log.d("Gesture", "Swipe Right → MainActivity")
-                val intent = Intent(this,  MainActivity::class.java)
+                val intent = Intent(this,  MapActivity::class.java)
                 startActivity(intent)
                 return true
             }
