@@ -58,54 +58,61 @@
         android:layout_marginHorizontal="32dp"/>
 
     <!-- Confirm Password Input -->
+
+    <!-- Location Input -->
+
+    <!-- Bio Input -->
+
+    <!-- Signup Button -->
+
     <EditText
         android:id="@+id/password_confirm_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="20dp"
         android:hint="Confirm Password"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@id/password_input"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="32dp"/>
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password_input" />
 
-    <!-- Location Input -->
     <EditText
         android:id="@+id/location_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="347dp"
+        android:layout_height="82dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="24dp"
         android:hint="Where are you from?"
         android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/password_confirm_input"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="32dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password_confirm_input" />
 
-    <!-- Bio Input -->
     <EditText
         android:id="@+id/bio_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="344dp"
+        android:layout_height="113dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="28dp"
         android:hint="Write your bio (optional)"
         android:inputType="textMultiLine"
         android:minLines="3"
-        app:layout_constraintTop_toBottomOf="@id/location_input"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="32dp"/>
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/location_input" />
 
-    <!-- Signup Button -->
     <Button
         android:id="@+id/signup_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="133dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="44dp"
+        android:backgroundTint="@color/purple"
         android:text="Sign Up"
-        app:layout_constraintTop_toBottomOf="@id/bio_input"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bio_input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
