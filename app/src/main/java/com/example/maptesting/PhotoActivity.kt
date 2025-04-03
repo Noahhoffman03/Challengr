@@ -26,7 +26,7 @@ class PhotoActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.photo_viewer)
+        setContentView(R.layout.activity_photo)
         val backButton = findViewById<ImageButton>(R.id.back_button)
         imageView = findViewById(R.id.imageView)
         picButton = findViewById(R.id.btn_take_picture)
@@ -44,7 +44,7 @@ class PhotoActivity : AppCompatActivity() {
 
         } }
         backButton.setOnClickListener {
-            val intent = Intent(this, ChallengeActivity::class.java)
+            val intent = Intent(this, ChallengeCreateActivity::class.java)
             startActivity(intent)
             //if(uri_save != null) { //if the uri save exists, bring it with back to the challenge page
             //   intent.putExtra("uri_save", uri_save.toString())
@@ -94,7 +94,7 @@ class PhotoActivity : AppCompatActivity() {
         }
 
         private fun startChallengeActivity(file: File) {
-            val intent = Intent(this, ChallengeActivity::class.java)
+            val intent = Intent(this, ChallengeCreateActivity::class.java)
             intent.putExtra("Photo", file.toUri().toString())
             startActivity(intent)
         }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -31,9 +32,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private val defaultLocation = LatLng(44.3238, -93.9758) // Default location (GAC)
     private var newchalPinMarker: Marker? = null // Tracks the new challenge pin (red)
 
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_map)
 
         // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -43,10 +45,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
 
-
-
-        val createChallengeButton: ImageButton = findViewById(R.id.toChallengrz)
-        createChallengeButton.setOnClickListener {
+        val toChallengrz: ImageButton = findViewById(R.id.toChallengrz)
+        toChallengrz.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }
@@ -60,10 +60,26 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val toChallList: ImageButton = findViewById(R.id.toChallList)
         toChallList.setOnClickListener {
-            val intent = Intent(this, ChallList::class.java)
+            val intent = Intent(this, ChallengeListActivity::class.java)
             startActivity(intent)
         }
+        val createChallengeButton = findViewById<Button>(R.id.testing_button)
+        createChallengeButton.setOnClickListener {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    val userLatLng = LatLng(location.latitude, location.longitude)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 16f))
+                    startChallengeActivity(userLatLng)
+                } else {
+                    startChallengeActivity(defaultLocation)
+                }
+            }.addOnFailureListener {
+                startChallengeActivity(defaultLocation)
+            }
+        }
+
     }
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -165,7 +181,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //opens the new challenge page
     private fun startChallengeActivity(location: LatLng) {
-        val intent = Intent(this, ChallengeActivity::class.java)
+        val intent = Intent(this, ChallengeCreateActivity::class.java)
         intent.putExtra("LATITUDE", location.latitude) //brings stuff for coords
         intent.putExtra("LONGITUDE", location.longitude)
         startActivity(intent)
@@ -173,7 +189,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //opens current challenge based on pin
     private fun startCurrentChallengeActivity(challenge: Challenge) {
-        val intent = Intent(this, CurrentChallengePage::class.java)
+        val intent = Intent(this, CurrentChallengeActivity::class.java)
         intent.putExtra("CHALLENGE_TITLE", challenge.title)
         intent.putExtra("CHALLENGE_DESC", challenge.desc)
 

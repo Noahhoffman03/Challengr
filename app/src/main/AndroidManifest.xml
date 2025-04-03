@@ -48,14 +48,14 @@
 
 
 
-        <activity android:name=".ChallengeActivity"/>
+        <activity android:name=".ChallengeCreateActivity"/>
         <activity android:name=".PhotoActivity"/>
-        <activity android:name=".CurrentChallengePage"/>
+        <activity android:name=".CurrentChallengeActivity"/>
         <activity android:name=".SignupActivity"/>
         <activity android:name=".MapActivity"/>
         <activity android:name=".ProfileActivity"/>
-        <activity android:name=".ChallList"/>
-        <activity android:name=".ChallengeView"/>
+        <activity android:name=".ChallengeListActivity"/>
+        <activity android:name=".ChallengeViewActivity"/>
 
 
         <!--Contains the API key for the map to work. NEEDED, DO NOT MESS WITH -->

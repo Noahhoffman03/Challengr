@@ -29,7 +29,7 @@ class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.profile_page)
+        setContentView(R.layout.activity_profile)
         gestureDetector = GestureDetector(this, this)
         //usernameText = findViewById(R.id.username_text)
         supportActionBar?.title = "Profile"

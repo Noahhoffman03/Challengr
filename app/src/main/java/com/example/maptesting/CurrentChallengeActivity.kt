@@ -15,12 +15,12 @@ import android.view.GestureDetector
 //There is definetly a better way of doing this page for the loading stuff
 //but this is what I came up with and don't wanna bother optimizing it rn
 
-class CurrentChallengePage : AppCompatActivity(), GestureDetector.OnGestureListener {
+class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     lateinit var gestureDetector: GestureDetector
     var MIN_DISTANCE = 150
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.currentchallenge_page)
+        setContentView(R.layout.activity_current_challenge)
         gestureDetector = GestureDetector(this, this)
         // get the challenge data from previous page
         val title = intent.getStringExtra("CHALLENGE_TITLE") ?: "No Title"
@@ -82,7 +82,7 @@ class CurrentChallengePage : AppCompatActivity(), GestureDetector.OnGestureListe
         if (abs(diffX) > abs(diffY)) {
             if (diffX < -MIN_DISTANCE) {
                 Log.d("Gesture", "Swipe Left → ChallList")
-                val intent = Intent(this, ChallList::class.java)
+                val intent = Intent(this, ChallengeListActivity::class.java)
                 startActivity(intent)
                 return true
             } else if (diffX > MIN_DISTANCE) {
