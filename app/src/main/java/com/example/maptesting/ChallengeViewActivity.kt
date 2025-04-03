@@ -9,16 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.abs
 import android.view.GestureDetector
 
-class ChallengeView : AppCompatActivity(), GestureDetector.OnGestureListener{
+class ChallengeViewActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
     lateinit var gestureDetector: GestureDetector
     var MIN_DISTANCE = 150
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.challenge_view)
+        setContentView(R.layout.activity_challenge_view)
         gestureDetector = GestureDetector(this, this)
         val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
-            val intent = Intent(this, ChallList::class.java)
+            val intent = Intent(this, ChallengeListActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -61,7 +61,7 @@ class ChallengeView : AppCompatActivity(), GestureDetector.OnGestureListener{
         if (abs(diffX) > abs(diffY) && abs(diffX) > MIN_DISTANCE && abs(velocityX) > 100) {
             if (diffX < 0) {
                 Log.d("Gesture", "Left Swipe Detected, launching ChallengeActivity")
-                val intent = Intent(this, ChallList::class.java)
+                val intent = Intent(this, ChallengeListActivity::class.java)
                 startActivity(intent)
             } else {
                 Log.d("Gesture", "Right Swipe Detected Do Nothing")

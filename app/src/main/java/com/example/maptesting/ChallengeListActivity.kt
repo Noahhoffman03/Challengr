@@ -14,7 +14,7 @@ import android.view.GestureDetector
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.abs
 
-class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
+class ChallengeListActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -23,7 +23,7 @@ class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
     private val MIN_DISTANCE = 200
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.challlist)
+        setContentView(R.layout.activity_challenge_list)
         gestureDetector = GestureDetector(this, this)
         val toChallView = findViewById<ImageButton>(R.id.back_button)
         toChallView.setOnClickListener {
@@ -34,7 +34,7 @@ class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
 
         val backButton = findViewById<ImageButton>(R.id.imageButton)
         backButton.setOnClickListener {
-            val intent = Intent(this, ChallengeView::class.java)
+            val intent = Intent(this, ChallengeViewActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -83,7 +83,7 @@ class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
     }
 
     private fun startCurrentChallengeActivity(challenge: Item) {
-        val intent = Intent(this, CurrentChallengePage::class.java)
+        val intent = Intent(this, CurrentChallengeActivity::class.java)
         intent.putExtra("CHALLENGE_TITLE", challenge.text)
         intent.putExtra("CHALLENGE_DESC", challenge.desc)
         startActivity(intent)
@@ -125,7 +125,7 @@ class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
         if (abs(diffX) > abs(diffY)) {
             if (diffX < -MIN_DISTANCE) {
                 Log.d("Gesture", "Swipe Left → CurrentChallengePage")
-                val intent = Intent(this,  CurrentChallengePage::class.java)
+                val intent = Intent(this,  CurrentChallengeActivity::class.java)
                 startActivity(intent)
                 return true
             } else if (diffX > MIN_DISTANCE) {

@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.maptesting.LoginActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
 import kotlin.math.abs
@@ -25,7 +24,7 @@ class SignupActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.signup_page)
+        setContentView(R.layout.activity_signup)
         gestureDetector = GestureDetector(this, this)
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()

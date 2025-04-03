@@ -33,7 +33,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_map)
 
         // Initialize location client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -60,7 +60,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val toChallList: ImageButton = findViewById(R.id.toChallList)
         toChallList.setOnClickListener {
-            val intent = Intent(this, ChallList::class.java)
+            val intent = Intent(this, ChallengeListActivity::class.java)
             startActivity(intent)
         }
     }
@@ -165,7 +165,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //opens the new challenge page
     private fun startChallengeActivity(location: LatLng) {
-        val intent = Intent(this, ChallengeActivity::class.java)
+        val intent = Intent(this, ChallengeCreateActivity::class.java)
         intent.putExtra("LATITUDE", location.latitude) //brings stuff for coords
         intent.putExtra("LONGITUDE", location.longitude)
         startActivity(intent)
@@ -173,7 +173,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //opens current challenge based on pin
     private fun startCurrentChallengeActivity(challenge: Challenge) {
-        val intent = Intent(this, CurrentChallengePage::class.java)
+        val intent = Intent(this, CurrentChallengeActivity::class.java)
         intent.putExtra("CHALLENGE_TITLE", challenge.title)
         intent.putExtra("CHALLENGE_DESC", challenge.desc)
 

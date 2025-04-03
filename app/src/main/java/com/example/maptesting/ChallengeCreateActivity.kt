@@ -29,7 +29,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class ChallengeActivity : AppCompatActivity() {
+class ChallengeCreateActivity : AppCompatActivity() {
     val firestoreClient = FirestoreClient()
     lateinit var imageView: ImageView
     private lateinit var challenge: Challenge
@@ -41,7 +41,7 @@ class ChallengeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_challenge)
+        setContentView(R.layout.activity_challenge_create)
         val submitButton = findViewById<Button>(R.id.submit_button)
         val title_text = findViewById<TextInputEditText>(R.id.title_input)
         val desc_text = findViewById<TextInputEditText>(R.id.textInputEditText)

@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         } else {
             Log.d("AuthCheck", "No user logged in, showing login screen")
-            setContentView(R.layout.login_page)
+            setContentView(R.layout.activity_login)
 
             emailEditText = findViewById(R.id.emailEditText)
             passwordEditText = findViewById(R.id.passwordEditText)
