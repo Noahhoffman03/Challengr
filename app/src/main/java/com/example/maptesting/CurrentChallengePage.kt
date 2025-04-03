@@ -99,4 +99,5 @@ class CurrentChallengePage : AppCompatActivity(), GestureDetector.OnGestureListe
 
     }
 
+
 }
