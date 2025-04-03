@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -19,20 +17,17 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import java.net.URI
-import kotlin.math.abs
 
-class ChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
+class ChallengeActivity : AppCompatActivity() {
     val firestoreClient = FirestoreClient()
     lateinit var imageView: ImageView
     private lateinit var challenge: Challenge
     private lateinit var user: User
-    lateinit var gestureDetector: GestureDetector
-    private var MIN_DISTANCE = 150
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge)
-        gestureDetector = GestureDetector(this, this)
         val submitButton = findViewById<Button>(R.id.submit_button)
         val title_text = findViewById<TextInputEditText>(R.id.title_input)
         val desc_text = findViewById<TextInputEditText>(R.id.textInputEditText)
@@ -45,6 +40,7 @@ class ChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         //// ------- Extra stuff if we wanna display the coordinates
         // val locationTextView: TextView = findViewById(R.id.location_info)
         // locationTextView.text = "Challenge Location:\nLatitude: $latitude \nLongitude: $longitude"
+
 
         // Back button
         val backButton = findViewById<ImageButton>(R.id.back_button)
@@ -107,7 +103,9 @@ class ChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener
 
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            // goes back to the previous page
+            finish()
+             // goes back to the previous page
+
 
 
             //Code that gets something from the database
@@ -125,55 +123,5 @@ class ChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             }
             */
         }
-    }
-        override fun onTouchEvent(event: MotionEvent?): Boolean {
-            if (event != null) {
-                return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
-            }
-            return super.onTouchEvent(event)
-        }
-        override fun onDown(e: MotionEvent): Boolean {
-            TODO("Not yet implemented")
-            return false
-        }
-
-        override fun onShowPress(e: MotionEvent) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onSingleTapUp(e: MotionEvent): Boolean {
-            TODO("Not yet implemented")
-            return false
-        }
-
-        override fun onScroll(
-            e1: MotionEvent?,
-            e2: MotionEvent,
-            distanceX: Float,
-            distanceY: Float
-        ): Boolean {
-            TODO("Not yet implemented")
-        }
-        override fun onLongPress(e: MotionEvent) {
-            TODO("Not yet implemented")
-        }
-
-        override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-            if (e1 == null) return false
-            val diffX = e2.x - e1.x
-            val diffY = e2.y - e1.y
-
-            if (abs(diffX) > abs(diffY) && abs(diffX) > MIN_DISTANCE && abs(velocityX) > 100) {
-                if (diffX < 0) {
-                    Log.d("Gesture", "Left Swipe Detected, launching ChallengeActivity")
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    Log.d("Gesture", "Right Swipe Detected")
-                }
-                return true
-            }
-            return false
-
     }
 }

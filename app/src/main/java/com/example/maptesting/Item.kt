@@ -2,5 +2,6 @@ package com.example.maptesting
 
 data class Item(
     val image: Int,
-    val text: String
+    val text: String,
+    val desc: String
 )
