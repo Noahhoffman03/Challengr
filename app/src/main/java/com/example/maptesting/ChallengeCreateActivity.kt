@@ -69,6 +69,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
         photoView.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             //dispatchTakePictureIntent()
+            //val imageFile = createImageFile()
             try {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             } catch (e: ActivityNotFoundException) {
