@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.abs
@@ -88,7 +87,7 @@ class CurrentChallengePage : AppCompatActivity(), GestureDetector.OnGestureListe
                 return true
             } else if (diffX > MIN_DISTANCE) {
                 Log.d("Gesture", "Swipe Right → MainActivity")
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, MapActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
                 finish()
