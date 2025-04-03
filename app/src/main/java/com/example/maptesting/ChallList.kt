@@ -20,7 +20,7 @@ class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val firestore = FirebaseFirestore.getInstance() // Firestore thingy
     private lateinit var gestureDetector: GestureDetector
-    private val MIN_DISTANCE = 150
+    private val MIN_DISTANCE = 200
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.challlist)
@@ -51,7 +51,9 @@ class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
 
         // this creates a vertical layout Manager
         recyclerview.layoutManager = LinearLayoutManager(this)
-
+        recyclerview.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+        }
         // ArrayList of class ItemsViewModel
         val data = ArrayList<Item>()
 
@@ -79,6 +81,7 @@ class ChallList : AppCompatActivity(), GestureDetector.OnGestureListener {
             }
 
     }
+
     private fun startCurrentChallengeActivity(challenge: Item) {
         val intent = Intent(this, CurrentChallengePage::class.java)
         intent.putExtra("CHALLENGE_TITLE", challenge.text)

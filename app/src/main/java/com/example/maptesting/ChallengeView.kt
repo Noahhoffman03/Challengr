@@ -24,22 +24,21 @@ class ChallengeView : AppCompatActivity(), GestureDetector.OnGestureListener{
         }
     }
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event != null) {
-            return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+        return if (event != null) {
+            gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+        } else {
+            super.onTouchEvent(event)
         }
-        return super.onTouchEvent(event)
     }
+
     override fun onDown(e: MotionEvent): Boolean {
-        TODO("Not yet implemented")
         return false
     }
 
     override fun onShowPress(e: MotionEvent) {
-        TODO("Not yet implemented")
     }
 
     override fun onSingleTapUp(e: MotionEvent): Boolean {
-        TODO("Not yet implemented")
         return false
     }
 
@@ -49,10 +48,9 @@ class ChallengeView : AppCompatActivity(), GestureDetector.OnGestureListener{
         distanceX: Float,
         distanceY: Float
     ): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
     override fun onLongPress(e: MotionEvent) {
-        TODO("Not yet implemented")
     }
 
     override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
@@ -66,7 +64,7 @@ class ChallengeView : AppCompatActivity(), GestureDetector.OnGestureListener{
                 val intent = Intent(this, ChallList::class.java)
                 startActivity(intent)
             } else {
-                Log.d("Gesture", "Right Swipe Detected")
+                Log.d("Gesture", "Right Swipe Detected Do Nothing")
             }
             return true
         }
