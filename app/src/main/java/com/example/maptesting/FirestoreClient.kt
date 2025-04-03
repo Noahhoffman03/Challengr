@@ -168,7 +168,7 @@ class FirestoreClient {
             creatorId = this["creatorId"] as String,
             title = this["title"] as String,
             desc = this["desc"] as String,
-            photo = this["photo"] as File?,
+            photo = this["photo"] as String,
             lat = this["lat"] as Double,
             lng = this["lng"] as Double
         )

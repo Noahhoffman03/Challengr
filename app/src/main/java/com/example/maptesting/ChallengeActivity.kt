@@ -84,7 +84,7 @@ class ChallengeActivity : AppCompatActivity() {
             challenge = Challenge(
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
-                photo = null,
+                photo = uriSave.toString(),
                 lat = latitude,
                 lng = longitude
             )

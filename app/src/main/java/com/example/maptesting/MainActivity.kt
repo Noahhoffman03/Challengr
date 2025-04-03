@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -133,7 +134,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     val photoFile = photoPath?.let { File(it) }
 
                     // Create Challenge object
-                    val challenge = Challenge(id, creatorId, title, desc, photoFile, lat, lng)
+                    val challenge = Challenge(id, creatorId, title, desc, photoFile?.toUri().toString(), lat, lng)
 
 
                     // Places challenge pin on the map
@@ -181,7 +182,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         intent.putExtra("CHALLENGE_DESC", challenge.desc)
 
         // NEED TO FIGURE OUT PICTURES ---------
-        intent.putExtra("CHALLENGE_PHOTO", challenge.photo?.path)
+        intent.putExtra("CHALLENGE_PHOTO", challenge.photo)//.path)
         startActivity(intent)
     }
 

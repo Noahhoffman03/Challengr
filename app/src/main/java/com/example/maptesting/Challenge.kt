@@ -7,7 +7,7 @@ data class Challenge(
     val creatorId: String = "",
     val title: String,
     val desc: String,
-    val photo: File?,
+    val photo: String,
     val lat: Double,
     val lng: Double
 )
