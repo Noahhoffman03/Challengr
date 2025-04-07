@@ -109,20 +109,18 @@ class ChallengeCreateActivity : AppCompatActivity() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
+
         submitButton.setOnClickListener {
             val title = title_text.text.toString()
             val desc = desc_text.text.toString()
 
             val currentUser = FirebaseAuth.getInstance().currentUser
+
+            //Get the users email
             val email = currentUser?.email
-
-            if (email == null) {
-                Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
             val db = FirebaseFirestore.getInstance()
 
+            //Gets the corresponding Users data from the email
             db.collection("Users")
                 .whereEqualTo("email", email)
                 .limit(1)
@@ -147,28 +145,24 @@ class ChallengeCreateActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             firestoreClient.insertChallenge(challenge).collect { id ->
                                 if (id == null) {
-                                    Log.e("Challenge", "Challenge insertion returned null ID.")
                                     return@collect
                                 }
 
                                 val updatedChallenge = challenge.copy(id = id)
 
                                 firestoreClient.updateChallenge(updatedChallenge).collect { result ->
-                                    Log.d("Challenge", "Challenge update result: $result")
 
-                                    // Add challenge ID to user's completedChallenges
+                                    //Mark the challenge complete for the creator
                                     db.collection("Users").document(userDocId)
-                                        .update("completedChallenges", FieldValue.arrayUnion(id))
+                                        .update("completedChallenge", FieldValue.arrayUnion(id))
                                         .addOnSuccessListener {
-                                            Log.d("Challenge", "Challenge marked completed for creator")
 
-                                            // Only now navigate back
+                                            //Return to the map
                                             val intent = Intent(this@ChallengeCreateActivity, MapActivity::class.java)
                                             startActivity(intent)
                                             finish()
                                         }
                                         .addOnFailureListener { e ->
-                                            Log.e("Challenge", "Failed to update user's completedChallenges", e)
                                             Toast.makeText(this@ChallengeCreateActivity, "Challenge created but not marked complete.", Toast.LENGTH_SHORT).show()
                                         }
                                 }
@@ -176,19 +170,15 @@ class ChallengeCreateActivity : AppCompatActivity() {
                         }
                     } else {
                         Toast.makeText(this, "Username not found", Toast.LENGTH_SHORT).show()
-                        Log.e("Firestore", "No user document found for email: $email")
                     }
                 }
                 .addOnFailureListener { e ->
-                    Log.e("Firestore", "Failed to fetch username", e)
                     Toast.makeText(this, "Failed to fetch user info", Toast.LENGTH_SHORT).show()
                 }
         }
-
-
-
     }
 
+            //Corey Stuff
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 val imageBitmap = data?.extras?.get("data") as Bitmap

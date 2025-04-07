@@ -9,7 +9,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.abs
 import android.view.GestureDetector
-
+import android.widget.Button
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 //There is definetly a better way of doing this page for the loading stuff
@@ -18,6 +22,8 @@ import android.view.GestureDetector
 class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     lateinit var gestureDetector: GestureDetector
     var MIN_DISTANCE = 150
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_current_challenge)
@@ -25,7 +31,10 @@ class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureL
         // get the challenge data from previous page
         val title = intent.getStringExtra("CHALLENGE_TITLE") ?: "No Title"
         val description = intent.getStringExtra("CHALLENGE_DESC") ?: "No Description"
-       //????
+        val challengeId = intent.getStringExtra("CHALLENGE_ID") //Need to pass for the completing the challenge
+        val creatorId = intent.getStringExtra("CREATOR_ID") ?: "Unknown" //Incase we wanna display
+
+        //pointless rn ---------------------------
         val photo = intent.getStringExtra("CHALLENGE_PHOTO") ?: "No Photo"
 
         // Set the title and description
@@ -33,7 +42,7 @@ class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureL
         findViewById<TextView>(R.id.desc_display).text = description
 
 
-        // Photo stuff idk
+        // Photo stuff idk -----------------------
         if (photo != "No Photo") {
             // WE NEED TO DO ------------
         }
@@ -44,7 +53,51 @@ class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureL
             finish()
         }
 
+
+        //Completion button (pretty much same as the new challenge submission code)
+        val completeButton = findViewById<Button>(R.id.complete_button)
+        completeButton.setOnClickListener {
+            //load email for user
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            val email = currentUser?.email
+
+            if (email == null || challengeId == null) {
+                Log.e("CompleteChallenge", "Missing email or challenge ID.")
+                return@setOnClickListener
+            }
+
+            //Loads the current users data
+            val db = FirebaseFirestore.getInstance()
+            db.collection("Users")
+                .whereEqualTo("email", email)
+                .limit(1)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        val userDoc = documents.documents[0]
+                        val userDocId = userDoc.id //gets the users id
+
+                        //Add the challenge id to the users account
+                        db.collection("Users").document(userDocId)
+                            .update("completedChallenge", FieldValue.arrayUnion(challengeId))
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Challenge Completed!", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(this, "User not found.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error fetching user info.", Toast.LENGTH_SHORT).show()
+                }
+        }
+
     }
+
+
+
+
+    //Swipe tech stuff _________________________________________
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return if (event != null) {
             gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
