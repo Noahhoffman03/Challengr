@@ -25,16 +25,12 @@ class ChallengeListActivity : AppCompatActivity(), GestureDetector.OnGestureList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge_list)
         gestureDetector = GestureDetector(this, this)
-        val toChallView = findViewById<ImageButton>(R.id.back_button)
-        toChallView.setOnClickListener {
-            val intent = Intent(this, MapActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
 
-        val backButton = findViewById<ImageButton>(R.id.imageButton)
+
+
+        val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
-            val intent = Intent(this, ChallengeViewActivity::class.java)
+            val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
             finish()
         }
