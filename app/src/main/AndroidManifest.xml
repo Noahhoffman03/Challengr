@@ -55,7 +55,7 @@
         <activity android:name=".MapActivity"/>
         <activity android:name=".ProfileActivity"/>
         <activity android:name=".ChallengeListActivity"/>
-        <activity android:name=".ChallengeViewActivity"/>
+
 
 
         <!--Contains the API key for the map to work. NEEDED, DO NOT MESS WITH -->
