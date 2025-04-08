@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -22,6 +23,9 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Firebase
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -41,6 +45,8 @@ class ChallengeCreateActivity : AppCompatActivity() {
     val URL_PATH = "gs://challengr-1be1f.firebasestorage.app/challenges/"
     //private lateinit var imageAccessCode
     lateinit var currentPhotoPath: String
+    lateinit var metadata: UploadTask.TaskSnapshot
+    lateinit var downloadUri: Uri
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,10 +113,52 @@ class ChallengeCreateActivity : AppCompatActivity() {
         }
 
         submitButton.setOnClickListener {
+            val storage = Firebase.storage
+            val storageRef = storage.reference
+            var file = Uri.fromFile(imageFile)
+            val photoRef = storageRef.child("image/${file.lastPathSegment}")
+            //val uploadTask = photoRef.putFile(file)
+            imageView.isDrawingCacheEnabled = true
+            imageView.buildDrawingCache()
+            val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val data = baos.toByteArray()
+
+            var uploadTask = photoRef.putBytes(data)
+
+            uploadTask.addOnFailureListener {
+                Log.d("PHOTO FAIL", "photo upload failed")
+            }.addOnSuccessListener { takeSnapshot ->
+                metadata = takeSnapshot
+
+            }
+
+            val downloadUri = uploadTask.continueWithTask { task ->
+                if(!task.isSuccessful) {
+                    task.exception?.let{
+                        throw it
+                    }
+                }
+                photoRef.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful){
+                    downloadUri = task.result
+                }else{
+                    Log.d("URL FAIL", "failed url get")
+                }
+            }
+
+            /*
+            uploadTask.addOnFailureListener {
+                Log.d("PHOTO FAIL", "photo upload failed")
+            }.addOnSuccessListener { taskSnapshot ->
+                metadata = taskSnapshot
+            }*/
             challenge = Challenge(
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
-                photo = imageUrl,
+                photo = null,
                 lat = latitude,
                 lng = longitude
             )

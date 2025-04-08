@@ -143,10 +143,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     val photoPath = document.getString("photo")
 
                     // Convert Firestore photo path to a File (assuming local storage)
-                    val photoFile = photoPath?.let { File(it) }
+                    //val photoFile = photoPath?.let { File(it) }
+                    val photoUri = photoPath?.toUri()
 
                     // Create Challenge object
-                    val challenge = Challenge(id, creatorId, title, desc, photoFile?.toUri().toString(), lat, lng)
+                    val challenge = Challenge(id, creatorId, title, desc, photoUri, lat, lng)
 
 
                     // Places challenge pin on the map

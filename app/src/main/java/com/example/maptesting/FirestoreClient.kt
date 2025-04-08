@@ -1,5 +1,6 @@
 package com.example.maptesting
 
+import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -168,7 +169,7 @@ class FirestoreClient {
             creatorId = this["creatorId"] as String,
             title = this["title"] as String,
             desc = this["desc"] as String,
-            photo = this["photo"] as String,
+            photo = this["photo"] as Uri,
             lat = this["lat"] as Double,
             lng = this["lng"] as Double
         )
