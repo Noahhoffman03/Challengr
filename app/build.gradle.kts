@@ -53,6 +53,6 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-storage")
-    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 }
