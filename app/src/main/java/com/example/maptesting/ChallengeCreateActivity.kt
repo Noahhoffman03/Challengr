@@ -22,6 +22,9 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -106,49 +109,76 @@ class ChallengeCreateActivity : AppCompatActivity() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
+
         submitButton.setOnClickListener {
-            challenge = Challenge(
-                title = title_text.text.toString(),
-                desc = desc_text.text.toString(),
-                photo = imageUrl,
-                lat = latitude,
-                lng = longitude
-            )
+            val title = title_text.text.toString()
+            val desc = desc_text.text.toString()
 
+            val currentUser = FirebaseAuth.getInstance().currentUser
 
-            lifecycleScope.launch {
-                firestoreClient.insertChallenge(challenge).collect { id ->
-                    challenge = challenge.copy(id = id ?: "")
+            //Get the users email
+            val email = currentUser?.email
+            val db = FirebaseFirestore.getInstance()
+
+            //Gets the corresponding Users data from the email
+            db.collection("Users")
+                .whereEqualTo("email", email)
+                .limit(1)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        val doc = documents.documents[0]
+                        val username = doc.getString("username") ?: "unknown_user"
+                        val userDocId = doc.id
+
+                        // Build challenge object
+                        challenge = Challenge(
+                            title = title,
+                            desc = desc,
+                            photo = imageUrl,
+                            lat = latitude,
+                            lng = longitude,
+                            creatorId = username
+                        )
+
+                        // Insert and update challenge
+                        lifecycleScope.launch {
+                            firestoreClient.insertChallenge(challenge).collect { id ->
+                                if (id == null) {
+                                    return@collect
+                                }
+
+                                val updatedChallenge = challenge.copy(id = id)
+
+                                firestoreClient.updateChallenge(updatedChallenge).collect { result ->
+
+                                    //Mark the challenge complete for the creator
+                                    db.collection("Users").document(userDocId)
+                                        .update("completedChallenge", FieldValue.arrayUnion(id))
+                                        .addOnSuccessListener {
+
+                                            //Return to the map
+                                            val intent = Intent(this@ChallengeCreateActivity, MapActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Toast.makeText(this@ChallengeCreateActivity, "Challenge created but not marked complete.", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this, "Username not found", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                firestoreClient.updateChallenge(challenge).collect { result ->
-                    println(result)
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Failed to fetch user info", Toast.LENGTH_SHORT).show()
                 }
-
-
-            }
-
-            val intent = Intent(this, MapActivity::class.java)
-            startActivity(intent)
-            finish()
-            // goes back to the previous page
-
-
-            //Code that gets something from the database
-            /*
-            user = firestoreClient.getUser(user.username).collect{ result ->
-                if (result!= null){
-                    printLn("user got")
-                    //id = user.id
-                    //username = user.username
-                    //etc
-                }
-                else{
-                    println("no user")
-                }
-            }
-            */
         }
     }
+
+            //Corey Stuff
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 val imageBitmap = data?.extras?.get("data") as Bitmap
@@ -164,6 +194,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
                 super.onActivityResult(requestCode, resultCode, data)
             }
         }
+
         private fun createImageFile(): File {
             // Create an image file name
             val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -177,6 +208,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
                 currentPhotoPath = absolutePath
             }
         }
+
         private fun dispatchTakePictureIntent() {
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                 // Ensure that there's a camera activity to handle the intent
@@ -201,6 +233,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
                 }
             }
         }
+
         private fun galleryAddPic() {
             Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
                 val f = File(currentPhotoPath)
@@ -208,6 +241,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
                 sendBroadcast(mediaScanIntent)
             }
         }
+
         private fun setPic() {
             // Get the dimensions of the View
             val targetW: Int = imageView.width
@@ -233,8 +267,8 @@ class ChallengeCreateActivity : AppCompatActivity() {
             BitmapFactory.decodeFile(currentPhotoPath, bmOptions)?.also { bitmap ->
                 imageView.setImageBitmap(bitmap)
             }
-
         }
+
     fun bitmapToFile(
         context: Context?,
         bitmap: Bitmap,

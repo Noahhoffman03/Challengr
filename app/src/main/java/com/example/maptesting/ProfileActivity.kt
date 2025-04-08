@@ -63,6 +63,8 @@ class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
                     val bio = document.getString("bio") ?: "No bio available"
                     val mainLocation = document.getString("mainLocation") ?: "Unknown"
                     val completedChallenges = document.get("completedChallenge") as? List<*> ?: emptyList<Any>()
+                    Log.d("ProfileActivity", "Completed challenges list: $completedChallenges")
+
 
                     usernameText.text = username
                     supportActionBar?.title = username
@@ -89,6 +91,9 @@ class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         startActivity(intent)
         finish()
     }
+
+
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return if (event != null) {
             gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)

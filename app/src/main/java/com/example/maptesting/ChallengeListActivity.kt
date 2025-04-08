@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
 import android.view.GestureDetector
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 import kotlin.math.abs
+
 
 class ChallengeListActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
@@ -25,16 +28,12 @@ class ChallengeListActivity : AppCompatActivity(), GestureDetector.OnGestureList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_challenge_list)
         gestureDetector = GestureDetector(this, this)
-        val toChallView = findViewById<ImageButton>(R.id.back_button)
-        toChallView.setOnClickListener {
-            val intent = Intent(this, MapActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
 
-        val backButton = findViewById<ImageButton>(R.id.imageButton)
+
+
+        val backButton = findViewById<ImageButton>(R.id.back_button)
         backButton.setOnClickListener {
-            val intent = Intent(this, ChallengeViewActivity::class.java)
+            val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -54,40 +53,45 @@ class ChallengeListActivity : AppCompatActivity(), GestureDetector.OnGestureList
         recyclerview.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
         }
+
+
         // ArrayList of class ItemsViewModel
         val data = ArrayList<Item>()
 
         // This loop will create Views containing
         // the image with the title of the challenge
-        var i = 0
-        firestore.collection("Challenges") //for the collection
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val title = document.getString("title") ?: "No Title"
-                    val desc = document.getString("desc") ?: "No Description"
-                    data.add(Item(R.drawable.tiger, title, desc))
-                    i += 1
+
+        //I updated this to work with the new ChallengeRepository file to load all files
+        lifecycleScope.launch {
+            try {
+                val challenges = ChallengeRepository.getAllChallenges()
+                val data = challenges.map {
+                    Item(R.drawable.tiger, it.title, it.desc, it.creatorId, it.id)
                 }
 
-                // This will pass the ArrayList to our Adapter
-                //val adapter = Adapter(data)
-
-                // Setting the Adapter with the recyclerview
-                val adapter = Adapter(this, data) { challenge ->
+                val adapter = Adapter(this@ChallengeListActivity, ArrayList(data)) { challenge ->
                     startCurrentChallengeActivity(challenge)
                 }
                 recyclerview.adapter = adapter
-            }
 
+            } catch (e: Exception) {
+                Log.e("ChallengeListActivity", "Error loading challenges", e)
+            }
+        }
     }
 
     private fun startCurrentChallengeActivity(challenge: Item) {
         val intent = Intent(this, CurrentChallengeActivity::class.java)
         intent.putExtra("CHALLENGE_TITLE", challenge.text)
         intent.putExtra("CHALLENGE_DESC", challenge.desc)
+        intent.putExtra("CREATOR_ID", challenge.creatorId)
+        intent.putExtra("CHALLENGE_ID", challenge.id)
         startActivity(intent)
     }
+
+
+
+    //Swipe tech stuff _________________________________________
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return if (event != null) {
             gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
