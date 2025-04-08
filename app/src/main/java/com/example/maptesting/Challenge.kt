@@ -8,7 +8,7 @@ data class Challenge(
     val creatorId: String = "",
     val title: String,
     val desc: String,
-    val photo: Uri?,
+    val photo: Uri,
     val lat: Double,
     val lng: Double
 )

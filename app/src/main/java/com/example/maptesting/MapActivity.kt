@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -140,11 +141,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     val desc = document.getString("desc") ?: "No Description"
                     val lat = document.getDouble("lat") ?: 0.0
                     val lng = document.getDouble("lng") ?: 0.0
-                    val photoPath = document.getString("photo")
-
+                    var photoPath = document.getString("photo")
+                    if(photoPath == null){
+                        photoPath = "https://firebasestorage.googleapis.com/v0/b/challengr-1be1f.firebasestorage.app/o/image%2F20250408_104015-userImage.png?alt=media&token=bf5965ab-0cc8-48ca-99f7-9a5a27f470d9"
+                    }
                     // Convert Firestore photo path to a File (assuming local storage)
                     //val photoFile = photoPath?.let { File(it) }
-                    val photoUri = photoPath?.toUri()
+                    val photoUri = photoPath.toUri()
 
                     // Create Challenge object
                     val challenge = Challenge(id, creatorId, title, desc, photoUri, lat, lng)

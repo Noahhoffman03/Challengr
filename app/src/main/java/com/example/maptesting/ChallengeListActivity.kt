@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
 import android.view.GestureDetector
+import coil3.Uri
+import coil3.compose.AsyncImage
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlin.math.abs
 
@@ -66,6 +68,10 @@ class ChallengeListActivity : AppCompatActivity(), GestureDetector.OnGestureList
                 for (document in documents) {
                     val title = document.getString("title") ?: "No Title"
                     val desc = document.getString("desc") ?: "No Description"
+                    val image = AsyncImage(
+                        model = document.getString("uri") ?: "https://firebasestorage.googleapis.com/v0/b/challengr-1be1f.firebasestorage.app/o/image%2F20250408_104015-userImage.png?alt=media&token=bf5965ab-0cc8-48ca-99f7-9a5a27f470d9",
+                        contentDescription = null,
+                    )
                     data.add(Item(R.drawable.tiger, title, desc))
                     i += 1
                 }
@@ -86,6 +92,7 @@ class ChallengeListActivity : AppCompatActivity(), GestureDetector.OnGestureList
         val intent = Intent(this, CurrentChallengeActivity::class.java)
         intent.putExtra("CHALLENGE_TITLE", challenge.text)
         intent.putExtra("CHALLENGE_DESC", challenge.desc)
+        intent.putExtra("URL", challenge.image)
         startActivity(intent)
     }
     override fun onTouchEvent(event: MotionEvent?): Boolean {

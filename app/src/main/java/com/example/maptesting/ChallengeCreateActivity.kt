@@ -140,14 +140,15 @@ class ChallengeCreateActivity : AppCompatActivity() {
                         throw it
                     }
                 }
-                photoRef.downloadUrl
+                photoRef.downloadUrl}
+                /*
             }.addOnCompleteListener { task ->
                 if (task.isSuccessful){
                     downloadUri = task.result
                 }else{
                     Log.d("URL FAIL", "failed url get")
                 }
-            }
+            }*/
 
             /*
             uploadTask.addOnFailureListener {
@@ -158,7 +159,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
             challenge = Challenge(
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
-                photo = null,
+                photo = downloadUri.result,
                 lat = latitude,
                 lng = longitude
             )
