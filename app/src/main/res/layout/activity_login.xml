@@ -66,7 +66,7 @@
         android:id="@+id/passwordEditText"
         android:layout_width="274dp"
         android:layout_height="48dp"
-        android:hint="password"
+        android:hint="Password"
         android:inputType="textPassword"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
