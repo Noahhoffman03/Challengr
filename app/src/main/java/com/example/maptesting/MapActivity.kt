@@ -149,7 +149,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                             val color = if (isCompleted) {
                                 BitmapDescriptorFactory.HUE_GREEN
                             } else {
-                                BitmapDescriptorFactory.HUE_RED
+                                BitmapDescriptorFactory.HUE_ROSE
                             }
 
                             //place the actual marker
