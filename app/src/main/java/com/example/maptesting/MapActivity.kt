@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import java.io.File
@@ -126,31 +127,50 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     // This loads all the current challenges
-    // TO UPDATE
-    //  - load completed colors in different color
-
     private fun loadExistingChallenges() {
-        lifecycleScope.launch {
-            try {
-                val challenges = ChallengeRepository.getAllChallenges()
-                for (challenge in challenges) {
-                    val location = LatLng(challenge.lat, challenge.lng)
-                    val marker = mMap.addMarker(
-                        MarkerOptions()
-                            .position(location)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                    )
-                    marker?.tag = challenge
+        val currentUser = FirebaseAuth.getInstance().currentUser ?: return
+
+        //Get the current users completed challenge list
+        FirebaseFirestore.getInstance().collection("Users").document(currentUser.uid).get()
+            .addOnSuccessListener { document ->
+                //get all completed challenges as a lsts
+                val completedList = document.get("completedChallenge") as? List<String> ?: emptyList<String>()
+
+                //Get all challenges from the repository
+                lifecycleScope.launch {
+                        val challengelist = ChallengeRepository.getAllChallenges()
+                    //runs through all challenges to load them
+                        for (challenge in challengelist) {
+                            //their coordiantes for plotting
+                            val location = LatLng(challenge.lat, challenge.lng)
+
+                            // checks if the challenge id is in the users completed challenge
+                            val isCompleted = completedList.contains(challenge.id)
+                            val color = if (isCompleted) {
+                                BitmapDescriptorFactory.HUE_GREEN
+                            } else {
+                                BitmapDescriptorFactory.HUE_RED
+                            }
+
+                            //place the actual marker
+                            val marker = mMap.addMarker(
+                                MarkerOptions()
+                                    .position(location)
+                                    .icon(BitmapDescriptorFactory.defaultMarker(color))
+                            )
+                            marker?.tag = challenge //This was previsouly in here and breaks if not in
+
+                    }
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this@MapActivity, "Failed to load challenges.", Toast.LENGTH_SHORT).show()
             }
-        }
+
+
     }
 
 
+
     //Placing pin for new challenge
-    //Only places one at a time and in red
+    //Only places one at a time and in blue
     private fun placeSingleNewPin(latLng: LatLng) {
         newchalPinMarker?.remove()
         newchalPinMarker = mMap.addMarker(

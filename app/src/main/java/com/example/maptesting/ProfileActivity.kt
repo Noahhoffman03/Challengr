@@ -41,7 +41,7 @@ class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
         loadUserData()
 
-        //Testing log out feature
+        // log out feature
         val logoutButton: Button = findViewById(R.id.logout_button)
         logoutButton.setOnClickListener {
             logoutUser()
@@ -63,8 +63,6 @@ class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
                     val bio = document.getString("bio") ?: "No bio available"
                     val mainLocation = document.getString("mainLocation") ?: "Unknown"
                     val completedChallenges = document.get("completedChallenge") as? List<*> ?: emptyList<Any>()
-                    Log.d("ProfileActivity", "Completed challenges list: $completedChallenges")
-
 
                     usernameText.text = username
                     supportActionBar?.title = username
@@ -82,10 +80,10 @@ class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
             }
     }
 
+    //From online
     private fun logoutUser() {
-        FirebaseAuth.getInstance().signOut() // Logs out the user
-
-        // Redirect to LoginActivity and clear backstack
+        FirebaseAuth.getInstance().signOut() // Logout the user
+        // Redirect to LoginActivity
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
@@ -94,6 +92,9 @@ class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
 
 
 
+
+
+    //Swipe tech stuff _________________________________________
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return if (event != null) {
             gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
