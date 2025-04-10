@@ -61,11 +61,6 @@ class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureL
             val currentUser = FirebaseAuth.getInstance().currentUser
             val email = currentUser?.email
 
-            if (email == null || challengeId == null) {
-                Log.e("CompleteChallenge", "Missing email or challenge ID.")
-                return@setOnClickListener
-            }
-
             //Loads the current users data
             val db = FirebaseFirestore.getInstance()
             db.collection("Users")
@@ -83,6 +78,9 @@ class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureL
                             .addOnSuccessListener {
                                 Toast.makeText(this, "Challenge Completed!", Toast.LENGTH_SHORT).show()
                             }
+                        val intent = Intent(this, MapActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     } else {
                         Toast.makeText(this, "User not found.", Toast.LENGTH_SHORT).show()
                     }
