@@ -19,8 +19,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
-import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
@@ -134,7 +132,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
 
             }
 
-            val downloadUri = uploadTask.continueWithTask { task ->
+            val urlTask = uploadTask.continueWithTask { task ->
                 if(!task.isSuccessful) {
                     task.exception?.let{
                         throw it
@@ -158,7 +156,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
             challenge = Challenge(
                 title = title_text.text.toString(),
                 desc = desc_text.text.toString(),
-                photo = null,
+                photo = imageUrl,
                 lat = latitude,
                 lng = longitude
             )

@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
-import java.io.File
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
@@ -144,7 +143,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     // Convert Firestore photo path to a File (assuming local storage)
                     //val photoFile = photoPath?.let { File(it) }
-                    val photoUri = photoPath?.toUri()
+                    val photoUri = photoPath?.toUri().toString()
 
                     // Create Challenge object
                     val challenge = Challenge(id, creatorId, title, desc, photoUri, lat, lng)
