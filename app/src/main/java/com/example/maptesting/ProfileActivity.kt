@@ -46,6 +46,12 @@ class ProfileActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         logoutButton.setOnClickListener {
             logoutUser()
         }
+
+        val map_button: Button = findViewById(R.id.map_button)
+        map_button.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun loadUserData() {

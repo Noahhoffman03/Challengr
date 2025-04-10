@@ -6,14 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/map_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/profile_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="164dp"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,13 +33,12 @@
         android:id="@+id/location_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="220dp"
         android:gravity="center"
         android:text="Hometown:"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,11 +58,12 @@
         android:id="@+id/bio_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="224dp"
+        android:layout_marginTop="328dp"
         android:text="Bio"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,12 +84,11 @@
         android:id="@+id/challenges_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="364dp"
+        android:layout_marginTop="440dp"
         android:text="Challenges Completed:"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -97,28 +108,24 @@
         android:id="@+id/logout_button"
         android:layout_width="109dp"
         android:layout_height="109dp"
-        android:layout_marginTop="144dp"
-        android:backgroundTint="@color/purple"
-        android:text="Logout"
-        android:textSize="18sp"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/royal_blue"
+        android:text="SignOut"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/challenges_label"
-        app:layout_constraintTop_toBottomOf="@+id/challenges_text" />
+        app:layout_constraintStart_toStartOf="@+id/bio_text" />
 
     <Button
         android:id="@+id/map_button"
         android:layout_width="109dp"
         android:layout_height="109dp"
-        android:layout_marginTop="144dp"
-        android:backgroundTint="@color/purple"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/royal_blue"
         android:text="Map"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/challenges_label"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/challenges_label"
-        app:layout_constraintTop_toBottomOf="@+id/challenges_text" />
+        app:layout_constraintEnd_toEndOf="@+id/bio_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
