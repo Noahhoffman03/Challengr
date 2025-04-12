@@ -6,6 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="92dp"
+        android:layout_height="112dp"
+        android:src="@drawable/challenger_light_mode_logo"
+        tools:layout_editor_absoluteX="-7dp"
+        tools:layout_editor_absoluteY="-32dp" />
+
     <Button
         android:id="@+id/btn_take_picture"
         android:layout_width="wrap_content"
@@ -21,8 +29,9 @@
         android:id="@+id/back_button"
         android:layout_width="64dp"
         android:layout_height="53dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.997"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_revert" />
