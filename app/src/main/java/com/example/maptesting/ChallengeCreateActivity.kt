@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -42,6 +43,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
     private lateinit var imageFile: File
     val REQUEST_IMAGE_CAPTURE = 100
     val URL_PATH = "gs://challengr-1be1f.firebasestorage.app/challenges/"
+
     //private lateinit var imageAccessCode
     lateinit var currentPhotoPath: String
 
@@ -96,7 +98,8 @@ class ChallengeCreateActivity : AppCompatActivity() {
                     Log.d("PhotoPicker", "Selected URI: $uri")
                     imageView.setImageURI(uri)
                     //imageFile = uri.toFile()
-                    imageUrl = URL_PATH+uri.toString()+".png"//+ imageAccessCode //also find a way to get a file|path from this
+                    imageUrl =
+                        URL_PATH + uri.toString() + ".png"//+ imageAccessCode //also find a way to get a file|path from this
                     //does just adding.png work? maybe
 
                 } else {
@@ -119,6 +122,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
             //Get the users email
             val email = currentUser?.email
             val db = FirebaseFirestore.getInstance()
+            var downloadUrl = uploadPhoto(imageFile)
 
             //Gets the corresponding Users data from the email
             db.collection("Users")
@@ -135,7 +139,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
                         challenge = Challenge(
                             title = title,
                             desc = desc,
-                            photo = imageUrl,
+                            photo = downloadUrl,
                             lat = latitude,
                             lng = longitude,
                             creatorId = username
@@ -150,22 +154,30 @@ class ChallengeCreateActivity : AppCompatActivity() {
 
                                 val updatedChallenge = challenge.copy(id = id)
 
-                                firestoreClient.updateChallenge(updatedChallenge).collect { result ->
+                                firestoreClient.updateChallenge(updatedChallenge)
+                                    .collect { result ->
 
-                                    //Mark the challenge complete for the creator
-                                    db.collection("Users").document(userDocId)
-                                        .update("completedChallenge", FieldValue.arrayUnion(id))
-                                        .addOnSuccessListener {
+                                        //Mark the challenge complete for the creator
+                                        db.collection("Users").document(userDocId)
+                                            .update("completedChallenge", FieldValue.arrayUnion(id))
+                                            .addOnSuccessListener {
 
-                                            //Return to the map
-                                            val intent = Intent(this@ChallengeCreateActivity, MapActivity::class.java)
-                                            startActivity(intent)
-                                            finish()
-                                        }
-                                        .addOnFailureListener { e ->
-                                            Toast.makeText(this@ChallengeCreateActivity, "Challenge created but not marked complete.", Toast.LENGTH_SHORT).show()
-                                        }
-                                }
+                                                //Return to the map
+                                                val intent = Intent(
+                                                    this@ChallengeCreateActivity,
+                                                    MapActivity::class.java
+                                                )
+                                                startActivity(intent)
+                                                finish()
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Toast.makeText(
+                                                    this@ChallengeCreateActivity,
+                                                    "Challenge created but not marked complete.",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    }
                             }
                         }
                     } else {
@@ -178,96 +190,96 @@ class ChallengeCreateActivity : AppCompatActivity() {
         }
     }
 
-            //Corey Stuff
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                val imageBitmap = data?.extras?.get("data") as Bitmap
-                val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-                val fileName =  "${timeStamp}-userImage.png"
-                imageFile = bitmapToFile(null, imageBitmap, fileName)!!
-                imageView.setImageBitmap(imageBitmap)
-                imageUrl = URL_PATH + fileName// + imageAccessCode
-                //if (imageUri != null) {
-                //  uriSave = imageUri
-                //}
-            } else {
-                super.onActivityResult(requestCode, resultCode, data)
-            }
-        }
-
-        private fun createImageFile(): File {
-            // Create an image file name
+    //Corey Stuff
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            val imageBitmap = data?.extras?.get("data") as Bitmap
             val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            return File.createTempFile(
-                "JPEG_${timeStamp}_", /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
-            ).apply {
-                // Save a file: path for use with ACTION_VIEW intents
-                currentPhotoPath = absolutePath
-            }
+            val fileName = "${timeStamp}-userImage.png"
+            imageFile = bitmapToFile(null, imageBitmap, fileName)!!
+            imageView.setImageBitmap(imageBitmap)
+            imageUrl = URL_PATH + fileName// + imageAccessCode
+            //if (imageUri != null) {
+            //  uriSave = imageUri
+            //}
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
+    }
 
-        private fun dispatchTakePictureIntent() {
-            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                // Ensure that there's a camera activity to handle the intent
-                takePictureIntent.resolveActivity(packageManager)?.also {
-                    // Create the File where the photo should go
-                    val photoFile: File? = try {
-                        createImageFile()
-                    } catch (ex: IOException) {
-                        // Error occurred while creating the File
-                        null
-                    }
-                    // Continue only if the File was successfully created
-                    photoFile?.also {
-                        val photoURI: Uri = FileProvider.getUriForFile(
-                            this,
-                            "com.example.android.fileprovider",
-                            it
-                        )
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-                    }
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "com.example.android.fileprovider",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
                 }
             }
         }
+    }
 
-        private fun galleryAddPic() {
-            Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
-                val f = File(currentPhotoPath)
-                mediaScanIntent.data = Uri.fromFile(f)
-                sendBroadcast(mediaScanIntent)
-            }
+    private fun galleryAddPic() {
+        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
+            val f = File(currentPhotoPath)
+            mediaScanIntent.data = Uri.fromFile(f)
+            sendBroadcast(mediaScanIntent)
         }
+    }
 
-        private fun setPic() {
-            // Get the dimensions of the View
-            val targetW: Int = imageView.width
-            val targetH: Int = imageView.height
+    private fun setPic() {
+        // Get the dimensions of the View
+        val targetW: Int = imageView.width
+        val targetH: Int = imageView.height
 
-            val bmOptions = BitmapFactory.Options().apply {
-                // Get the dimensions of the bitmap
-                inJustDecodeBounds = true
+        val bmOptions = BitmapFactory.Options().apply {
+            // Get the dimensions of the bitmap
+            inJustDecodeBounds = true
 
-                BitmapFactory.decodeFile(currentPhotoPath)
+            BitmapFactory.decodeFile(currentPhotoPath)
 
-                val photoW: Int = outWidth
-                val photoH: Int = outHeight
+            val photoW: Int = outWidth
+            val photoH: Int = outHeight
 
-                // Determine how much to scale down the image
-                val scaleFactor: Int = Math.max(1, Math.min(photoW / targetW, photoH / targetH))
+            // Determine how much to scale down the image
+            val scaleFactor: Int = Math.max(1, Math.min(photoW / targetW, photoH / targetH))
 
-                // Decode the image file into a Bitmap sized to fill the View
-                inJustDecodeBounds = false
-                inSampleSize = scaleFactor
-                inPurgeable = true
-            }
-            BitmapFactory.decodeFile(currentPhotoPath, bmOptions)?.also { bitmap ->
-                imageView.setImageBitmap(bitmap)
-            }
+            // Decode the image file into a Bitmap sized to fill the View
+            inJustDecodeBounds = false
+            inSampleSize = scaleFactor
+            inPurgeable = true
         }
+        BitmapFactory.decodeFile(currentPhotoPath, bmOptions)?.also { bitmap ->
+            imageView.setImageBitmap(bitmap)
+        }
+    }
 
     fun bitmapToFile(
         context: Context?,
@@ -298,6 +310,22 @@ class ChallengeCreateActivity : AppCompatActivity() {
             e.printStackTrace()
             return file // it will return null
         }
+    }
+
+    fun uploadPhoto(imageFile: File): String {
+        var downloadUrl = ""
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val imagesRef = storageRef.child("images")
+        val uri = Uri.fromFile(imageFile)
+        val uploadTask = imagesRef.putFile(uri)
+        uploadTask.addOnCompleteListener { task ->
+            //downloadUrl = imagesRef.getDownloadUrl().toString()
+            if (task.isSuccessful) {
+                imageUrl = task.result.toString()
+            }
+        }
+        return downloadUrl
     }
 
 }
