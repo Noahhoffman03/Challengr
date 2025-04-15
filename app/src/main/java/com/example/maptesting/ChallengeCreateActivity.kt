@@ -67,10 +67,10 @@ class ChallengeCreateActivity : AppCompatActivity() {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
 
             try {
+                //Idk why depriciated
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             } catch (e: Exception) {
                 Toast.makeText(this, "Camera error", Toast.LENGTH_SHORT).show()
-                Log.e("CameraError", "Failed to launch camera", e)
             }
         }
 
@@ -97,11 +97,13 @@ class ChallengeCreateActivity : AppCompatActivity() {
             val email = currentUser?.email
             val db = FirebaseFirestore.getInstance()
 
+            //Checks if the image is taken before allowing submission
             if (!::imageUrl.isInitialized) {
                 Toast.makeText(this, "Please upload a photo first.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            //Gets the users stuff to use as the uploader
             db.collection("Users")
                 .whereEqualTo("email", email)
                 .limit(1)
@@ -185,7 +187,6 @@ class ChallengeCreateActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("FirebaseUpload", "Upload failed", e)
                 Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show()
             }
     }
