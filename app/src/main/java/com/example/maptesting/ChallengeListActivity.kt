@@ -66,7 +66,7 @@ class ChallengeListActivity : AppCompatActivity(), GestureDetector.OnGestureList
             try {
                 val challenges = ChallengeRepository.getAllChallenges()
                 val data = challenges.map {
-                    Item(R.drawable.tiger, it.title, it.desc, it.creatorId, it.id)
+                    Item(it.photo, it.title, it.desc, it.creatorId, it.id)
                 }
 
                 val adapter = Adapter(this@ChallengeListActivity, ArrayList(data)) { challenge ->
@@ -86,6 +86,7 @@ class ChallengeListActivity : AppCompatActivity(), GestureDetector.OnGestureList
         intent.putExtra("CHALLENGE_DESC", challenge.desc)
         intent.putExtra("CREATOR_ID", challenge.creatorId)
         intent.putExtra("CHALLENGE_ID", challenge.id)
+        intent.putExtra("CHALLENGE_PHOTO", challenge.photo)
         startActivity(intent)
     }
 

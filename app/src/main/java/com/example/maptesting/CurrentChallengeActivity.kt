@@ -1,6 +1,8 @@
 package com.example.maptesting
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -10,7 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.abs
 import android.view.GestureDetector
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
+import coil3.ImageLoader
+import coil3.request.ImageRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     lateinit var gestureDetector: GestureDetector
     var MIN_DISTANCE = 150
+    private lateinit var bitmap: Bitmap
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +39,6 @@ class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureL
         val description = intent.getStringExtra("CHALLENGE_DESC") ?: "No Description"
         val challengeId = intent.getStringExtra("CHALLENGE_ID") //Need to pass for the completing the challenge
         val creatorId = intent.getStringExtra("CREATOR_ID") ?: "Unknown" //Incase we wanna display
-
         //pointless rn ---------------------------
         val photo = intent.getStringExtra("CHALLENGE_PHOTO") ?: "No Photo"
 
@@ -43,9 +48,20 @@ class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureL
 
 
         // Photo stuff idk -----------------------
-        if (photo != "No Photo") {
-            // WE NEED TO DO ------------
-        }
+//        if (photo != "No Photo") {
+//            val loader = ImageLoader(this)
+//            val req = ImageRequest.Builder(this)
+//                .data(photo) // demo link
+//                .target { result ->
+//                    bitmap = (result as BitmapDrawable).bitmap
+//                }
+//                .build()
+//
+//            val disposable = loader.enqueue(req)
+//
+//        }
+//        val picDisplay = findViewById<ImageView>(R.id.pic_display)
+//        picDisplay.setImageBitmap(bitmap)
 
 
         // Back button

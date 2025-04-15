@@ -28,7 +28,9 @@ class Adapter(private val context: Context, private val list: List<Item>, privat
         val item = list[position]
 
         // sets the image to the imageview from our itemHolder class
-        holder.imageView.setImageResource(item.image)
+
+        //TODO: change to image url
+        holder.imageView.setImageResource(R.drawable.challenger_light_mode_logo)
 
         // sets the text to the textview from our itemHolder class
         holder.textView.text = item.text
