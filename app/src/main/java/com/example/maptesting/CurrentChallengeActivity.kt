@@ -14,8 +14,9 @@ import android.view.GestureDetector
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
-import coil3.ImageLoader
-import coil3.request.ImageRequest
+//import coil3.ImageLoader
+//import coil3.request.ImageRequest
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -60,8 +61,10 @@ class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureL
 //            val disposable = loader.enqueue(req)
 //
 //        }
-//        val picDisplay = findViewById<ImageView>(R.id.pic_display)
-//        picDisplay.setImageBitmap(bitmap)
+        val picDisplay = findViewById<ImageView>(R.id.pic_display)
+        Glide.with(this)
+            .load(photo)
+            .into(picDisplay);
 
 
         // Back button
