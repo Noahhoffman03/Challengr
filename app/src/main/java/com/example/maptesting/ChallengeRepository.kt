@@ -21,10 +21,9 @@ object ChallengeRepository {
             val desc = document.getString("desc") ?: "No Description"
             val lat = document.getDouble("lat") ?: 0.0
             val lng = document.getDouble("lng") ?: 0.0
-            val photoPath = document.getString("photo")
-            val photoUri = photoPath?.let { Uri.parse(it) }?.toString() ?: ""
+            val photoPath = document.getString("photo")?: ""
 
-            result.add(Challenge(id, creatorId, title, desc, photoUri, lat, lng))
+            result.add(Challenge(id, creatorId, title, desc, photoPath, lat, lng))
         }
 
         return result

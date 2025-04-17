@@ -2,6 +2,7 @@ package com.example.maptesting
 
 import android.content.Context
 import android.content.Intent
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,10 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.module.AppGlideModule
+import java.security.AccessController.getContext
 
 class Adapter(private val context: Context, private val list: List<Item>, private val onChallengeClick: (Item) -> Unit) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
@@ -28,8 +33,13 @@ class Adapter(private val context: Context, private val list: List<Item>, privat
         val item = list[position]
 
         // sets the image to the imageview from our itemHolder class
-        holder.imageView.setImageResource(item.image)
 
+        //TODO: change to image
+        //item.photo into glide download image
+        holder.imageView.setImageResource(R.drawable.challenger_light_mode_logo)
+        Glide.with(context)
+            .load(item.photo)
+            .into(holder.imageView);
         // sets the text to the textview from our itemHolder class
         holder.textView.text = item.text
 
