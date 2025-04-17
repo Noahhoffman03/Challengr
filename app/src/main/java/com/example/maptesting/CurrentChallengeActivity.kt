@@ -40,6 +40,7 @@ class CurrentChallengeActivity : AppCompatActivity(), GestureDetector.OnGestureL
         // Set the title and description
         findViewById<TextView>(R.id.title_display).text = title
         findViewById<TextView>(R.id.desc_display).text = description
+        findViewById<TextView>(R.id.creator).text = creatorId
 
 
         // Photo stuff idk -----------------------
