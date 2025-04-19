@@ -75,7 +75,7 @@ class ChallengeCreateActivity : AppCompatActivity() {
         }
 
         // Pick Image Button
-        val pickPhotoButton = findViewById<Button>(R.id.btn_take_picture)
+        val pickPhotoButton = imageView
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 imageView.setImageURI(uri)

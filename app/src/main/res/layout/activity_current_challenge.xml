@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".YourActivity">
+    android:padding="16dp">
 
     <ImageButton
         android:id="@+id/back_button"
@@ -15,7 +14,8 @@
         android:contentDescription="Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_revert" />
+        app:srcCompat="@android:drawable/ic_menu_revert"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/Title"
