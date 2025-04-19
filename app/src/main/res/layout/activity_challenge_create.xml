@@ -16,12 +16,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_revert" />
 
-    <TextView
-        android:id="@+id/Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Challengr"
-        android:textSize="32sp"
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="203dp"
+        android:layout_height="80dp"
+        android:src="@drawable/challenger_light_mode_logo"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
