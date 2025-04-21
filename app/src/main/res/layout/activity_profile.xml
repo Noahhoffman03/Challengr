@@ -21,51 +21,50 @@
         android:id="@+id/profile_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
-        android:textSize="24sp"
+        android:layout_marginTop="16dp"
+        android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/logoImageView" />
 
     <TextView
         android:id="@+id/location_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="Hometown:"
+        android:text="Hometown: "
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/bio_text"
+        app:layout_constraintTop_toBottomOf="@+id/bio_text" />
 
     <TextView
         android:id="@+id/location_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/rectangle"
+        android:layout_marginTop="24dp"
         android:gravity="center"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="@+id/location_label"
-        app:layout_constraintStart_toStartOf="@+id/location_label"
-        app:layout_constraintTop_toBottomOf="@+id/location_label" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/location_label"
+        app:layout_constraintTop_toBottomOf="@+id/bio_text" />
 
     <TextView
         android:id="@+id/bio_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="328dp"
+        android:layout_marginTop="20dp"
         android:text="Bio"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_title" />
 
     <TextView
         android:id="@+id/bio_text"
@@ -84,35 +83,37 @@
         android:id="@+id/challenges_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="440dp"
-        android:text="Challenges Completed:"
+        android:layout_marginTop="36dp"
+        android:text="Challenges Completed: "
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.176"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/location_label" />
 
     <TextView
         android:id="@+id/challenges_text"
-        android:layout_width="38dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/rectangle"
-        android:gravity="center"
+        android:layout_width="35dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="88dp"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="@+id/challenges_label"
-        app:layout_constraintStart_toStartOf="@+id/challenges_label"
-        app:layout_constraintTop_toBottomOf="@+id/challenges_label" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/challenges_label"
+        app:layout_constraintTop_toBottomOf="@+id/bio_text" />
 
     <Button
         android:id="@+id/logout_button"
         android:layout_width="88dp"
         android:layout_height="91dp"
+        android:layout_marginStart="44dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/royal_blue"
         android:text="SignOut"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/map_button"
         app:layout_constraintStart_toStartOf="@+id/challenges_label" />
 
     <Button
@@ -124,6 +125,15 @@
         android:text="Map"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/challenges_label" />
+        app:layout_constraintEnd_toEndOf="@+id/challenges_text" />
+
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="213dp"
+        android:layout_height="110dp"
+        android:src="@drawable/challenger_light_mode_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
