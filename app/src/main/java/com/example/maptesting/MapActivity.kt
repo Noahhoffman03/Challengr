@@ -48,7 +48,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
 
-        val toChallengrz: ImageButton = findViewById(R.id.toChallengrz)
+        val toChallengrz: Button = findViewById(R.id.toChallengrz)
         toChallengrz.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
@@ -61,7 +61,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         //            startActivity(intent)
         //  }
 
-        val toChallList: ImageButton = findViewById(R.id.toChallList)
+        val toChallList: Button = findViewById(R.id.toChallList)
         toChallList.setOnClickListener {
             val intent = Intent(this, ChallengeListActivity::class.java)
             startActivity(intent)
