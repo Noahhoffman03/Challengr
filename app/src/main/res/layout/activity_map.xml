@@ -38,9 +38,9 @@
         android:layout_width="88dp"
         android:layout_height="91dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginBottom="11dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginEnd="39dp"
+        android:layout_marginBottom="5dp"
         android:layout_toStartOf="@+id/toChallList"
         android:layout_toEndOf="@+id/toChallengrz"
         android:backgroundTint="@color/royal_blue"
@@ -53,11 +53,11 @@
         android:layout_width="88dp"
         android:layout_height="91dp"
         android:layout_alignParentEnd="true"
-        android:text="Chall List"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="38dp"
-        android:layout_marginBottom="11dp"
-        android:backgroundTint="@color/royal_blue" />
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="9dp"
+        android:backgroundTint="@color/royal_blue"
+        android:text="Chall List" />
 
     <Button
         android:id="@+id/toChallengrz"
@@ -65,10 +65,10 @@
         android:layout_height="93dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="11dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginBottom="2dp"
         android:backgroundTint="@color/royal_blue"
-        android:textSize="13sp"
-        android:text="Profile" />
+        android:text="Profile"
+        android:textSize="13sp" />
 
 </RelativeLayout>
