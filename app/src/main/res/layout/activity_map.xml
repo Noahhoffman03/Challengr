@@ -35,8 +35,8 @@
 
     <Button
         android:id="@+id/testing_button"
-        android:layout_width="88dp"
-        android:layout_height="91dp"
+        android:layout_width="89dp"
+        android:layout_height="93dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="39dp"
         android:layout_marginEnd="39dp"
@@ -44,20 +44,20 @@
         android:layout_toStartOf="@+id/toChallList"
         android:layout_toEndOf="@+id/toChallengrz"
         android:backgroundTint="@color/royal_blue"
-        android:text="New Chall"
-        android:textSize="16sp"
+        android:text="Create"
+        android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
         android:id="@+id/toChallList"
-        android:layout_width="88dp"
-        android:layout_height="91dp"
+        android:layout_width="89dp"
+        android:layout_height="93dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="25dp"
-        android:layout_marginBottom="9dp"
+        android:layout_marginBottom="5dp"
         android:backgroundTint="@color/royal_blue"
-        android:text="Chall List" />
+        android:text="*-----\n*-----\n*-----" />
 
     <Button
         android:id="@+id/toChallengrz"
@@ -66,9 +66,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="26dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="5dp"
         android:backgroundTint="@color/royal_blue"
-        android:text="Profile"
+        android:text="O\n\\  /\nY"
         android:textSize="13sp" />
 
 </RelativeLayout>
